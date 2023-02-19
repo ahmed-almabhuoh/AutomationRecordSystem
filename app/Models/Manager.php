@@ -30,7 +30,7 @@ class Manager extends Model implements FromCollection, WithHeadings, WithStyles
         'updated_at',
         'created_at',
     ];
-    protected $position = 'manager';
+    const POSITION = 'manager';
     protected $manager_id;
 
     public function __construct($manager_id = 0)

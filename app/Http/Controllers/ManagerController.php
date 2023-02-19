@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlockManagerEvent;
+use App\Events\CreatingBlockManagerEvent;
 use App\Http\Requests\StoreManagerRequest;
 use App\Models\Manager;
 use Dotenv\Validator;
@@ -48,7 +50,14 @@ class ManagerController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        // return response()->json([
+        //     'message' => $request->post('to_date'),
+        // ], 400);
         //
+        // event('block.manager', $request);
+
+
         $validator = Validator($request->only([
             'fname',
             'sname',
@@ -100,6 +109,8 @@ class ManagerController extends Controller
             }
             $manager->image = $image_path;
             $isCreated = $manager->save();
+
+            event(new CreatingBlockManagerEvent($request, $manager));
 
             return response()->json([
                 'message' => $isCreated

@@ -19,8 +19,8 @@ class CreateBlocksTable extends Migration
             $table->enum('position', Block::POSITIONS);
             $table->enum('status', Block::STATUS);
             $table->bigInteger('blocked_id');
-            $table->timestamp('from')->nullable();
-            $table->timestamp('to')->nullable();
+            $table->dateTime('from')->nullable();
+            $table->dateTime('to')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

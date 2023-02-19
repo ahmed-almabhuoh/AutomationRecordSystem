@@ -4,6 +4,7 @@
 
 @section('styles')
 
+    @livewireStyles
 @endsection
 
 @section('content')
@@ -20,105 +21,7 @@
             </div>
         </div>
         <!--begin::Form-->
-        <form id="creation-form">
-            <div class="card-body">
-                <div class="form-group mb-8">
-                    <div class="alert alert-custom alert-default" role="alert">
-                        <div class="alert-icon"><i class="flaticon-warning text-primary"></i></div>
-                        <div class="alert-text">
-                            After you add a new manager will take a super-manager role with all stored permissions in the
-                            software system.
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>First name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter manager first name ..." id="fname" />
-                </div>
-
-                <div class="form-group">
-                    <label>Second name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter manager second name ..." id="sname" />
-                </div>
-
-                <div class="form-group">
-                    <label>Third name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter manager third name ..." id="tname" />
-                </div>
-
-                <div class="form-group">
-                    <label>Last name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter manager last name ..." id="lname" />
-                </div>
-
-                <div class="form-group">
-                    <label>Identity No. <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter manager identity No. ..."
-                        id="identity_no" />
-                    <span class="form-text text-muted">We'll never share your identity No. with anyone else.</span>
-                </div>
-
-                <div class="form-group">
-                    <label>Phone No. <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter manager phone No. ..." id="phone" />
-                    <span class="form-text text-muted">We'll never share your Phone No. with anyone else.</span>
-                </div>
-
-                <div class="form-group">
-                    <label>Email <span class="text-danger">*</span></label>
-                    <input type="email" class="form-control" placeholder="Enter manager email ..." id="email" />
-                    <span class="form-text text-muted">We'll never share your email with anyone else.</span>
-                </div>
-
-                <div class="form-group">
-                    <label for="gedner">Gender <span class="text-danger">*</span></label>
-                    <select class="form-control" id="gender">
-                        <option value="0">-- Select manager gender --</option>
-                        @foreach (App\Models\Manager::GENDER as $gender)
-                            <option value="{{ $gender }}">{{ ucfirst($gender) }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="status">Status <span class="text-danger">*</span></label>
-                    <select class="form-control" id="status">
-                        <option value="0">-- Select manager account status --</option>
-                        @foreach (App\Models\Manager::STATUS as $status)
-                            <option value="{{ $status }}">{{ ucfirst($status) }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password <span class="text-danger">*</span></label>
-                    <input type="password" class="form-control" id="password" placeholder="Manager password ..." />
-                </div>
-
-                <div class="form-group">
-                    <label>Photo</label>
-                    <div></div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" />
-                        <label class="custom-file-label" for="image">Choose manager photo</label>
-                    </div>
-                </div>
-
-                <div class="form-group mb-1">
-                    <label for="local_region">Local region</label>
-                    <textarea class="form-control" id="local_region" rows="3"></textarea>
-                </div>
-
-                <div class="form-group mb-1">
-                    <label for="description">Manager description</label>
-                    <textarea class="form-control" id="description" rows="5"></textarea>
-                </div>
-            </div>
-            <div class="card-footer">
-                <button type="button" onclick="store()" class="btn btn-primary mr-2">Store</button>
-                <button type="reset" class="btn btn-secondary">Cancel</button>
-            </div>
-        </form>
+        @livewire('creation-form-block-manager-livewire')
         <!--end::Form-->
     </div>
 @endsection
@@ -140,6 +43,14 @@
             formData.append('image', document.getElementById('image').files[0]);
             formData.append('local_region', document.getElementById('local_region').value);
             formData.append('description', document.getElementById('description').value);
+            if (document.getElementById('is_blocked')) {
+                formData.append('is_blocked', document.getElementById('is_blocked').checked ? 1 : 0);
+                formData.append('block_description', document.getElementById('block_description').value);
+                if (document.getElementById('is_blocked').checked) {
+                    formData.append('from_date', document.getElementById('from_date').value);
+                    formData.append('to_date', document.getElementById('to_date').value);
+                }
+            }
 
 
             axios.post('/auto/managers', formData)
@@ -152,4 +63,6 @@
                 });
         }
     </script>
+
+    @livewireScripts
 @endsection

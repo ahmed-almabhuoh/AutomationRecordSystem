@@ -15,5 +15,12 @@ class Block extends Model
     ];
     const STATUS = [
         'active', 'disable'
-    ]; 
+    ];
+
+
+    // Relations
+    public function manager()
+    {
+        return $this->belongsTo(Manager::class, 'blocked_id', 'id');
+    }
 }

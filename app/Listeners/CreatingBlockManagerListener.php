@@ -30,7 +30,7 @@ class CreatingBlockManagerListener
         //
         if ($event->request->post('is_blocked')) {
             $block = new Block();
-            $block->description = $event->request->post('description');
+            $block->description = $event->request->post('block_description');
             $block->position = Manager::POSITION;
             $block->blocked_id  = $event->manager->id;
             $block->from = $event->request->post('from_date') ?? null;

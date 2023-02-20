@@ -9,8 +9,9 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Manager extends Model implements FromCollection, WithHeadings, WithStyles
+class Manager extends Authenticatable implements FromCollection, WithHeadings, WithStyles
 {
     use HasFactory;
 
@@ -83,5 +84,10 @@ class Manager extends Model implements FromCollection, WithHeadings, WithStyles
     public function getManagerGenderClassAttribute()
     {
         return $this->status === 'male' ? 'font-weight-bold text-primary' : 'font-weight-bold text-primary';
+    }
+
+    // Relations
+    public function blocks () {
+        return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
     }
 }

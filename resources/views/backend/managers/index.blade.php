@@ -3,7 +3,15 @@
 @section('title', 'All Managers')
 
 @section('styles')
-
+<style>
+    #manager-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 1px solid rgb(44, 192, 214);
+        padding: 3px;
+    }
+</style>
     @livewireStyles
 @endsection
 

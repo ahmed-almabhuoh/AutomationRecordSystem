@@ -51,7 +51,13 @@
                         <td data-field="Country" aria-label="China" class="datatable-cell"><span
                                 style="width: 121px;">{{ $manager->full_name }}</span></td>
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
-                                style="width: 121px;">{{ $manager->image ?? 'no photo' }}</span></td>
+                                style="width: 121px;">
+                                @if ($manager->image)
+                                    <img src="{{ Storage::url($manager->image) }}" id="manager-image" alt="-">
+                                @else
+                                    -
+                                @endif
+                            </span></td>
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;">{{ $manager->email }}</span></td>
                         <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span

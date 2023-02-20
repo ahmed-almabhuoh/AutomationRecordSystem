@@ -17,6 +17,18 @@ class Block extends Model
         'active', 'disable'
     ];
 
+    // Attributes
+    public function getBlockStatusClassAttribute()
+    {
+        $class = 'label font-weight-bold label-lg  label-light-success label-inline';
+        if ($this->status === 'active') {
+            $class = 'label font-weight-bold label-lg  label-light-danger label-inline';
+        } else if ($this->status === 'inactive') {
+            $class = 'label font-weight-bold label-lg  label-light-info label-inline';
+        }
+        return $class;
+    }
+
 
     // Relations
     public function manager()

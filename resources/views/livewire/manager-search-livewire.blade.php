@@ -87,9 +87,14 @@
                                             <li
                                                 class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                                 Choose an action: </li>
-                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
-                                                        class="navi-icon"><i class="la la-print"></i></span> <span
-                                                        class="navi-text">Print</span> </a> </li>
+                                            <li class="navi-item"> <a
+                                                    href="{{ route('user.blocks', [
+                                                        'blocked_id' => Crypt::encrypt($manager->id),
+                                                        'guard' => 'manager',
+                                                    ]) }}"
+                                                    class="navi-link"> <span class="navi-icon"><i
+                                                            class="la la-print"></i></span> <span
+                                                        class="navi-text">Block list</span> </a> </li>
                                             <li class="navi-item"> <a href="#" class="navi-link"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
                                                         class="navi-text">Copy</span> </a> </li>

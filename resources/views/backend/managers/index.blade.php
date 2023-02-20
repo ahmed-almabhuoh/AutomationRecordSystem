@@ -3,15 +3,15 @@
 @section('title', 'All Managers')
 
 @section('styles')
-<style>
-    #manager-image {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 1px solid rgb(44, 192, 214);
-        padding: 3px;
-    }
-</style>
+    <style>
+        #manager-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid rgb(44, 192, 214);
+            padding: 3px;
+        }
+    </style>
     @livewireStyles
 @endsection
 
@@ -52,7 +52,8 @@
                             <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose
                                 an option:</li>
                             <li class="navi-item">
-                                <a href="#" class="navi-link">
+                                <a href="#"
+                                    class="navi-link">
                                     <span class="navi-icon">
                                         <i class="la la-print"></i>
                                     </span>

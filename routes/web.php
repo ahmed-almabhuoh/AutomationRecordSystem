@@ -3,6 +3,7 @@
 use App\Events\CreatingBlockManagerEvent;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\BlockController;
 use App\Http\Controllers\ManagerController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -26,14 +27,18 @@ Route::prefix('/')->middleware(['auth:manager', 'activation'])->group(function (
     Route::prefix('auto')->group(function () {
         Route::resource('managers', ManagerController::class);
     });
-    
+
     Route::prefix('auto')->group(function () {
         Route::get('/', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-    
-        Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout')->withoutMiddleware('activation');
 
+        // Excel Routes
         Route::get('/manager/excel/report', [ManagerController::class, 'getReport'])->name('managers.report.xlsx');
         Route::get('/manager/excel/report/{id}', [ManagerController::class, 'getReportSpecificManager'])->name('manager.report.xlsx');
+
+        // Block Routes
+        Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');
+
+        Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout')->withoutMiddleware('activation');
     });
 });
 

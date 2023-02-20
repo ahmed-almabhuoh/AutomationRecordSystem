@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Block;
+use App\Models\Manager;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class BlockController extends Controller
 {
@@ -44,9 +46,25 @@ class BlockController extends Controller
      * @param  \App\Models\Block  $block
      * @return \Illuminate\Http\Response
      */
-    public function show(Block $block)
+    public function show($blocked_id, $position = 'manager')
     {
+        $blocked_id = Crypt::decrypt($blocked_id);
+        $blocks = Block::where([
+            ['position', '=', $position],
+            ['blocked_id', '=', $blocked_id],
+        ])->paginate();
         //
+        return response()->view('backend.blocks.index', [
+            'position' => $position,
+            'blocks' => $blocks,
+            'user' => $this->getUser($blocked_id, $position),
+        ]);
+    }
+
+    public function getUser ($id, $position = 'manager') {
+        if ($position === 'manager') {
+            return Manager::findOrFail($id);
+        }
     }
 
     /**

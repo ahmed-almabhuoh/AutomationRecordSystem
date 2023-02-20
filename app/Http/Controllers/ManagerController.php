@@ -50,14 +50,6 @@ class ManagerController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        // return response()->json([
-        //     'message' => $request->post('to_date'),
-        // ], 400);
-        //
-        // event('block.manager', $request);
-
-
         $validator = Validator($request->only([
             'fname',
             'sname',

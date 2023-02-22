@@ -3,7 +3,11 @@
 @section('title', 'Update Branch')
 
 @section('styles')
-
+    <style>
+        .branch-image {
+            margin-top: 25px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -39,19 +43,36 @@
                     </select>
                 </div>
 
-
-                {{-- <div class="form-group">
-                    <label>Photo</label>
-                    <div></div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" />
-                        <label class="custom-file-label" for="image">Choose branch photo</label>
-                    </div>
-                </div> --}}
-
                 <div class="form-group mb-1">
                     <label for="region">Local region</label>
                     <textarea class="form-control" id="region" rows="3">{{ $branch->region }}</textarea>
+                </div>
+
+                <div class="form-group  mb-1 row branch-image">
+                    <label class="col-form-label col-3 text-left" style="width: fit-content;">Branch Images</label>
+                    <div class="col-9">
+                        <div class="image-input image-input-empty image-input-outline" id="kt_user_edit_avatar"
+                            style="background-image: url('{{ Storage::url($branch->image) }}')">
+                            <div class="image-input-wrapper"></div>
+                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                data-action="change" data-toggle="tooltip" title=""
+                                data-original-title="Change avatar">
+                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                                <input type="hidden" name="profile_avatar_remove">
+                            </label>
+                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                data-action="cancel" data-toggle="tooltip" title=""
+                                data-original-title="Cancel avatar">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                data-action="remove" data-toggle="tooltip" title=""
+                                data-original-title="Remove avatar">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-footer">

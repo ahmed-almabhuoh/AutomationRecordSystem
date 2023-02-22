@@ -38,7 +38,7 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
     {
         $this->manager_id = $manager_id;
     }
-
+    
     public function collection()
     {
         if (!$this->manager_id) {

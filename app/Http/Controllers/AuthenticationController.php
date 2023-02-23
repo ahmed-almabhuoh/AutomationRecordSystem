@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\AuthenticatedGuards;
 use App\Models\Block;
 use App\Models\Manager;
@@ -45,6 +46,12 @@ class AuthenticationController extends Controller
 
             // Get User
             $user = $this->getUser($request->post('guard'), $credintials, $key);
+            if (is_null($user)) {
+                return response()->json([
+                    'message' => 'Wrong credentials, please try again!',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             if ($user->status === 'blocked' && Hash::check($credintials['password'], $user->password)) {
                 // Check user block function
                 return $this->isBlocked($credintials, $key === 'email' ? true : false, $request->post('guard'), $user);
@@ -70,12 +77,13 @@ class AuthenticationController extends Controller
     {
         $guard = 'manager';
 
-        if (auth($guard)->check()) {
-            $request->session()->invalidate();
-            auth($guard)->logout();
-
-            return redirect()->route('login', $guard);
+        if (auth('admin')->check()) {
+            $guard = 'admin';
         }
+
+        $request->session()->invalidate();
+        auth($guard)->logout();
+        return redirect()->route('login', $guard);
     }
 
     // Check Blocked Users
@@ -108,6 +116,16 @@ class AuthenticationController extends Controller
                 ])->first();
             } else {
                 $user = Manager::where([
+                    ['identity_no', '=', $credintials['identity_no']],
+                ])->first();
+            }
+        } else if ($guard === 'admin') {
+            if ($key === 'email') {
+                $user = Admin::where([
+                    ['email', '=', $credintials['email']],
+                ])->first();
+            } else {
+                $user = Admin::where([
                     ['identity_no', '=', $credintials['identity_no']],
                 ])->first();
             }

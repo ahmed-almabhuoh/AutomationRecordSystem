@@ -9,5 +9,5 @@ class AuthenticatedGuards extends Model
 {
     use HasFactory;
 
-    const GUARDS = ['manager'];
+    const GUARDS = ['manager', 'admin'];
 }

@@ -25,7 +25,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 //     return view('welcome');
 // });
 
-Route::prefix('/')->middleware(['auth:manager', 'activation'])->group(function () {
+Route::prefix('/')->middleware(['auth:manager,admin', 'activation'])->group(function () {
     Route::prefix('auto')->group(function () {
         Route::resource('managers', ManagerController::class);
         Route::resource('admins', AdminController::class);
@@ -51,7 +51,7 @@ Route::prefix('/')->middleware(['auth:manager', 'activation'])->group(function (
     });
 });
 
-Route::prefix('auto')->middleware(['guest:manager'])->group(function () {
+Route::prefix('auto')->middleware(['guest:manager,admin'])->group(function () {
     Route::get('{guard}/login', [AuthenticationController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthenticationController::class, 'login']);
 });

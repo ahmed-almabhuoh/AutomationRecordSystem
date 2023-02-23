@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
+// use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Manager extends Authenticatable implements FromCollection, WithHeadings, WithStyles
+class Admin extends Authenticatable implements FromCollection, WithHeadings, WithStyles
 {
     use HasFactory;
 
@@ -32,23 +31,24 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
         'updated_at',
         'created_at',
     ];
-    const POSITION = 'manager';
-    protected $manager_id;
+    const POSITION = 'admin';
+    protected $admin_id;
     const GENDER = ['male', 'female'];
     const STATUS = ['active', 'draft', 'blocked'];
 
-    public function __construct($manager_id = 0)
+
+    public function __construct($admin_id = 0)
     {
-        $this->manager_id = $manager_id;
+        $this->admin_id = $admin_id;
     }
 
     public function collection()
     {
-        if (!$this->manager_id) {
-            return Manager::select($this->columns)->get();
+        if (!$this->admin_id) {
+            return Admin::select($this->columns)->get();
         } else {
-            return Manager::select($this->columns)
-                ->where('id', '=', $this->manager_id)
+            return Admin::select($this->columns)
+                ->where('id', '=', $this->admin_id)
                 ->get();
         }
     }
@@ -71,7 +71,7 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
         return $this->fname . ' ' . $this->sname . ' ' . $this->tname . ' ' . $this->lname;
     }
 
-    public function getManagerStatusClassAttribute()
+    public function getAdminStatusClassAttribute()
     {
         $class = 'label font-weight-bold label-lg  label-light-success label-inline';
         if ($this->status === 'blocked') {
@@ -82,7 +82,7 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
         return $class;
     }
 
-    public function getManagerGenderClassAttribute()
+    public function getAdminGenderClassAttribute()
     {
         return $this->status === 'male' ? 'font-weight-bold text-primary' : 'font-weight-bold text-primary';
     }

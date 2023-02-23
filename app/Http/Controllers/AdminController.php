@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BlockManagerEvent;
-use App\Events\CreatingBlockManagerEvent;
-use App\Http\Requests\StoreManagerRequest;
-use App\Models\Manager;
-use Dotenv\Validator;
+use App\Events\CreatingBlockAdminEvent;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +11,7 @@ use Illuminate\Validation\Rules\Password;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
-class ManagerController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,10 +21,10 @@ class ManagerController extends Controller
     public function index()
     {
         //
-        $managers = Manager::paginate();
+        $admins = Admin::paginate();
 
-        return response()->view('backend.managers.index', [
-            'managers' => $managers,
+        return response()->view('backend.admins.index', [
+            'admins' => $admins,
         ]);
     }
 
@@ -39,7 +36,7 @@ class ManagerController extends Controller
     public function create()
     {
         //
-        return response()->view('backend.managers.store');
+        return response()->view('backend.admins.store');
     }
 
     /**
@@ -69,11 +66,11 @@ class ManagerController extends Controller
             'sname' => 'required|string|min:2|max:20',
             'tname' => 'required|string|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
-            'phone' => 'required|string|min:7|max:13|unique:managers,phone',
-            'email' => 'required|email|unique:managers,email',
+            'phone' => 'required|string|min:7|max:13|unique:admins,phone',
+            'email' => 'required|email|unique:admins,email',
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
-            'identity_no' => 'required|string|min:9|max:9|unique:managers,identity_no',
+            'identity_no' => 'required|string|min:9|max:9|unique:admins,identity_no',
             'password' => ['required', Password::min(8)->uncompromised()->letters()->numbers(), 'string', 'max:25'],
             'image' => 'nullable',
             'local_region' => 'nullable|min:5|max:50',
@@ -81,33 +78,33 @@ class ManagerController extends Controller
         ]);
         //
         if (!$validator->fails()) {
-            $manager = new Manager();
-            $manager->fname = $request->post('fname');
-            $manager->sname = $request->post('sname');
-            $manager->tname = $request->post('tname');
-            $manager->lname = $request->post('lname');
-            $manager->phone = $request->post('phone');
-            $manager->identity_no = $request->post('identity_no');
-            $manager->email = $request->post('email');
-            $manager->password = Hash::make($request->post('password'));
-            $manager->gender = $request->post('gender');
-            $manager->status = $request->post('status');
-            $manager->local_region = $request->post('local_region') ?? null;
-            $manager->description = $request->post('description') ?? null;
+            $admin = new Admin();
+            $admin->fname = $request->post('fname');
+            $admin->sname = $request->post('sname');
+            $admin->tname = $request->post('tname');
+            $admin->lname = $request->post('lname');
+            $admin->phone = $request->post('phone');
+            $admin->identity_no = $request->post('identity_no');
+            $admin->email = $request->post('email');
+            $admin->password = Hash::make($request->post('password'));
+            $admin->gender = $request->post('gender');
+            $admin->status = $request->post('status');
+            $admin->local_region = $request->post('local_region') ?? null;
+            $admin->description = $request->post('description') ?? null;
             $image_path = null;
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $image_path = $file->store('user/managers', 'public');
+                $image_path = $file->store('user/admins', 'public');
             }
-            $manager->image = $image_path;
-            $isCreated = $manager->save();
+            $admin->image = $image_path;
+            $isCreated = $admin->save();
 
-            event(new CreatingBlockManagerEvent($request, $manager));
+            event(new CreatingBlockAdminEvent($request, $admin));
 
             return response()->json([
                 'message' => $isCreated
-                    ? 'Manager added successfully.'
-                    : 'Failed to add manager, please try again!'
+                    ? 'Admin added successfully.'
+                    : 'Failed to add admin, please try again!'
             ], $isCreated
                 ? Response::HTTP_CREATED
                 : Response::HTTP_BAD_REQUEST);
@@ -121,10 +118,10 @@ class ManagerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show(Manager $manager)
+    public function show(Admin $admin)
     {
         //
     }
@@ -132,15 +129,15 @@ class ManagerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $manager = Manager::findOrFail(Crypt::decrypt($id));
+        $admin = Admin::findOrFail(Crypt::decrypt($id));
         //
-        return response()->view('backend.managers.update', [
-            'manager' => $manager
+        return response()->view('backend.admins.update', [
+            'admin' => $admin
         ]);
     }
 
@@ -148,12 +145,12 @@ class ManagerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $manager = Manager::findOrFail(Crypt::decrypt($id));
+        $admin = Admin::findOrFail(Crypt::decrypt($id));
         $validator = Validator($request->only([
             'fname',
             'sname',
@@ -173,11 +170,11 @@ class ManagerController extends Controller
             'sname' => 'required|string|min:2|max:20',
             'tname' => 'required|string|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
-            'phone' => 'required|string|min:7|max:13|unique:managers,phone,' . $manager->id,
-            'email' => 'required|email|unique:managers,email,' . $manager->id,
+            'phone' => 'required|string|min:7|max:13|unique:admins,phone,' . $admin->id,
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
-            'identity_no' => 'required|string|min:9|max:9|unique:managers,identity_no,' . $manager->id,
+            'identity_no' => 'required|string|min:9|max:9|unique:admins,identity_no,' . $admin->id,
             'password' => ['nullable', Password::min(8)->uncompromised()->letters()->numbers(), 'max:25'],
             'image' => 'nullable',
             'local_region' => 'nullable|min:5|max:50',
@@ -185,32 +182,32 @@ class ManagerController extends Controller
         ]);
         //
         if (!$validator->fails()) {
-            $manager->fname = $request->post('fname');
-            $manager->sname = $request->post('sname');
-            $manager->tname = $request->post('tname');
-            $manager->lname = $request->post('lname');
-            $manager->phone = $request->post('phone');
-            $manager->identity_no = $request->post('identity_no');
-            $manager->email = $request->post('email');
+            $admin->fname = $request->post('fname');
+            $admin->sname = $request->post('sname');
+            $admin->tname = $request->post('tname');
+            $admin->lname = $request->post('lname');
+            $admin->phone = $request->post('phone');
+            $admin->identity_no = $request->post('identity_no');
+            $admin->email = $request->post('email');
             if ($request->post('password')) {
-                $manager->password = Hash::make($request->post('password'));
+                $admin->password = Hash::make($request->post('password'));
             }
-            $manager->gender = $request->post('gender');
-            $manager->status = $request->post('status');
-            $manager->local_region = $request->post('local_region') ?? null;
-            $manager->description = $request->post('description') ?? null;
+            $admin->gender = $request->post('gender');
+            $admin->status = $request->post('status');
+            $admin->local_region = $request->post('local_region') ?? null;
+            $admin->description = $request->post('description') ?? null;
             $image_path = null;
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $image_path = $file->store('user/managers', 'public');
-                $manager->image = $image_path;
+                $image_path = $file->store('user/admins', 'public');
+                $admin->image = $image_path;
             }
-            $isUpdated = $manager->save();
+            $isUpdated = $admin->save();
 
             return response()->json([
                 'message' => $isUpdated
-                    ? 'Manager updated successfully.'
-                    : 'Failed to update manager, please try again!'
+                    ? 'Admin updated successfully.'
+                    : 'Failed to update admin, please try again!'
             ], $isUpdated
                 ? Response::HTTP_OK
                 : Response::HTTP_BAD_REQUEST);
@@ -224,39 +221,37 @@ class ManagerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $manager = Manager::findOrFail(Crypt::decrypt($id));
+        $admin = Admin::findOrFail(Crypt::decrypt($id));
         //
-        if ($manager->delete()) {
+        if ($admin->delete()) {
             return response()->json([
                 'title' => 'Deleted',
-                'text' => 'Manager deleted successfully.',
+                'text' => 'Admin deleted successfully.',
                 'icon' => 'success',
             ], Response::HTTP_OK);
         } else {
             return response()->json([
                 'title' => 'Failed!',
-                'text' => 'Failed to delete manager, please try again!',
+                'text' => 'Failed to delete admin, please try again!',
                 'icon' => 'error',
             ], Response::HTTP_BAD_REQUEST);
         }
     }
 
-    // Get managers report
+    // Get admins report
     public function getReport()
     {
-        return Excel::download(new Manager(), 'managers.xlsx');
+        return Excel::download(new Admin(), 'admins.xlsx');
     }
 
-    // Get manager report
-    public function getReportSpecificManager($id)
+    // Get admin report
+    public function getReportSpecificAdmin($id)
     {
-        // $manager = Manager::findOrFail(Crypt::decrypt($id));
-        // $manager = Manager::find(Crypt::decrypt($id));
-        return Excel::download(new Manager(Crypt::decrypt($id)), 'manager.xlsx');
+        return Excel::download(new Admin(Crypt::decrypt($id)), 'admin.xlsx');
     }
 }

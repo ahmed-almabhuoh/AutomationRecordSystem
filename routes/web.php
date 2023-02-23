@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\CreatingBlockManagerEvent;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\BlockController;
@@ -27,6 +28,8 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::prefix('/')->middleware(['auth:manager', 'activation'])->group(function () {
     Route::prefix('auto')->group(function () {
         Route::resource('managers', ManagerController::class);
+        Route::resource('admins', AdminController::class);
+
         Route::resource('branches', BranchController::class);
     });
 
@@ -38,6 +41,8 @@ Route::prefix('/')->middleware(['auth:manager', 'activation'])->group(function (
         Route::get('/manager/excel/report/{id}', [ManagerController::class, 'getReportSpecificManager'])->name('manager.report.xlsx');
         Route::get('/branch/excel/report', [BranchController::class, 'getReport'])->name('branches.report.xlsx');
         Route::get('/branch/excel/report/{id}', [BranchController::class, 'getReportSpecificBranch'])->name('branch.report.xlsx');
+        Route::get('/admin/excel/report', [AdminController::class, 'getReport'])->name('admins.report.xlsx');
+        Route::get('/admin/excel/report/{id}', [AdminController::class, 'getReportSpecificAdmin'])->name('admin.report.xlsx');
 
         // Block Routes
         Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

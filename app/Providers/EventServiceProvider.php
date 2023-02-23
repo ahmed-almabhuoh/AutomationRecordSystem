@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\CreatingBlockAdminEvent;
 use App\Events\CreatingBlockManagerEvent;
+use App\Listeners\CreatingBlockAdminListener;
 use App\Listeners\CreatingBlockManagerListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,6 +25,10 @@ class EventServiceProvider extends ServiceProvider
 
         CreatingBlockManagerEvent::class => [
             CreatingBlockManagerListener::class,
+        ],
+
+        CreatingBlockAdminEvent::class => [
+            CreatingBlockAdminListener::class,
         ],
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Block;
 use App\Models\Manager;
 use Illuminate\Http\Request;
@@ -64,6 +65,8 @@ class BlockController extends Controller
     public function getUser ($id, $position = 'manager') {
         if ($position === 'manager') {
             return Manager::findOrFail($id);
+        }else if ($position === 'admin') {
+            return Admin::findOrFail($id);
         }
     }
 

@@ -11,7 +11,7 @@ class Block extends Model
 
     // Attributes
     const POSITIONS = [
-        'manager'
+        'manager', 'admin'
     ];
     const STATUS = [
         'active', 'disable'

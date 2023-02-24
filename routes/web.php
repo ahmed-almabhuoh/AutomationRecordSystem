@@ -25,7 +25,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 //     return view('welcome');
 // });
 
-Route::prefix('/')->middleware(['auth:manager,admin', 'activation'])->group(function () {
+Route::prefix('/')->middleware(['auth:manager,admin', 'activation', 'soft_deleted'])->group(function () {
     Route::prefix('auto')->group(function () {
         Route::resource('managers', ManagerController::class);
         Route::resource('admins', AdminController::class);
@@ -48,7 +48,7 @@ Route::prefix('/')->middleware(['auth:manager,admin', 'activation'])->group(func
         Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');
         Route::post('block/{blocked_id}/{guard}', [BlockController::class, 'store'])->name('blocks.store');
 
-        Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout')->withoutMiddleware('activation');
+        Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout')->withoutMiddleware(['activation', 'soft_deleted']);
     });
 });
 

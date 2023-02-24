@@ -59,6 +59,10 @@ class AuthenticationController extends Controller
                 return $this->isBlocked($credintials, $key === 'email' ? true : false, $request->post('guard'), $user);
             }
 
+            if ($user->deleted_at) {
+                return $this->isSoftDeleted($user);
+            }
+
             if (Auth::guard($request->post('guard'))->attempt($credintials, false)) {
                 event(new AuthenticatedDraftUserEvent(Auth::guard($request->post('guard'))->user()));
                 return response()->json([
@@ -106,6 +110,17 @@ class AuthenticationController extends Controller
                 }
             }
         }
+    }
+
+    // Deny SoftDeleted
+    public function isSoftDeleted($user)
+    {
+        if ($user->deleted_at) {
+            return response()->json([
+                'message' => 'You cannot access to your account at this moment!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        return;
     }
 
     // Get user

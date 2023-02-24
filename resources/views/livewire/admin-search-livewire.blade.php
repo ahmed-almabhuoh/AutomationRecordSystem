@@ -40,6 +40,9 @@
                     <th data-field="Type" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
                         <span style="width: 121px;">Gender</span>
                     </th>
+                    <th data-field="Type" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
+                        <span style="width: 121px;">Denied</span>
+                    </th>
                     <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
                         <span style="width: 125px;">Actions</span>
                     </th>
@@ -48,14 +51,14 @@
             <tbody class="datatable-body">
                 @if (!count($admins))
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             No data found ...
                         </td>
                     </tr>
                 @endif
 
                 <tr>
-                    <td colspan="6" wire:loading>
+                    <td colspan="7" wire:loading>
                         Search in progress ...
                     </td>
                 </tr>
@@ -80,15 +83,26 @@
                             <span style="width: 121px;"><span class="label label-primary label-dot mr-2"></span><span
                                     class="{{ $admin->admin_gender_class }}">{{ ucfirst($admin->gender) }}</span></span>
                         </td>
+
+
+                        <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
+                            <span style="width: 121px;"><span class="label label-{{ $admin->admin_deletion_class }} label-dot mr-2">
+                                </span>
+                                <span class="font-weight-bold text-{{ $admin->admin_deletion_class }}">{{ $admin->admin_deletion }}</span>
+                            </span>
+                        </td>
+
                         <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
                             class="datatable-cell"><span style="overflow: visible; position: relative; width: 125px;">
                                 <div class="dropdown dropdown-inline"> <a href="javascript:;"
                                         class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown"> <span
                                             class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24">
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none"
+                                                    fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24"
+                                                        height="24">
                                                     </rect>
                                                     <path
                                                         d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
@@ -255,8 +269,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-light-primary font-weight-bold"
                                                 data-dismiss="modal">Close</button>
-                                            <button type="button"
-                                                onclick="blockAdmin('admin')"
+                                            <button type="button" onclick="blockAdmin('admin')"
                                                 class="btn btn-primary font-weight-bold">Save
                                                 changes</button>
                                         </div>

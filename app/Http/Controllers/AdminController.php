@@ -27,6 +27,7 @@ class AdminController extends Controller
         return response()->view('backend.admins.index', [
             'admins' => $admins,
         ]);
+        // return response()->view('backend.admins.index');
     }
 
     /**

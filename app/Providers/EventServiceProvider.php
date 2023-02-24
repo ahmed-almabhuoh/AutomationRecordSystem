@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\AuthenticatedDraftUserEvent;
 use App\Events\CreatingBlockAdminEvent;
 use App\Events\CreatingBlockManagerEvent;
+use App\Listeners\AuthenticatedDraftUserListener;
 use App\Listeners\CreatingBlockAdminListener;
 use App\Listeners\CreatingBlockManagerListener;
 use Illuminate\Auth\Events\Registered;
@@ -29,6 +31,10 @@ class EventServiceProvider extends ServiceProvider
 
         CreatingBlockAdminEvent::class => [
             CreatingBlockAdminListener::class,
+        ],
+
+        AuthenticatedDraftUserEvent::class => [
+            AuthenticatedDraftUserListener::class,
         ],
     ];
 

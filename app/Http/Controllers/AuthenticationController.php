@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AuthenticatedDraftUserEvent;
+use App\Listeners\AuthenticatedDraftUserListener;
 use App\Models\Admin;
 use App\Models\AuthenticatedGuards;
 use App\Models\Block;
@@ -58,6 +60,7 @@ class AuthenticationController extends Controller
             }
 
             if (Auth::guard($request->post('guard'))->attempt($credintials, false)) {
+                event(new AuthenticatedDraftUserEvent(Auth::guard($request->post('guard'))->user()));
                 return response()->json([
                     'message' => 'Login successfully',
                 ], Response::HTTP_OK);

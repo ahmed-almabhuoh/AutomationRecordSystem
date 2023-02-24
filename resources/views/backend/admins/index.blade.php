@@ -44,7 +44,7 @@
                                 </g>
                             </svg>
                             <!--end::Svg Icon-->
-                        </span>Export</button>
+                        </span>Settings</button>
                     <!--begin::Dropdown Menu-->
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                         <!--begin::Navigation-->
@@ -59,14 +59,25 @@
                                     <span class="navi-text">Print</span>
                                 </a>
                             </li>
+
+                            <li class="navi-item" wire:model="only_trashed">
+                                <a href="javascript:void(0)" class="navi-link">
+                                    <span class="navi-icon">
+                                        <i class="la la-copy"></i>
+                                    </span>
+                                    <span class="navi-text">Only Trashed</span>
+                                </a>
+                            </li>
+
                             <li class="navi-item">
                                 <a href="#" class="navi-link">
                                     <span class="navi-icon">
                                         <i class="la la-copy"></i>
                                     </span>
-                                    <span class="navi-text">Copy</span>
+                                    <span class="navi-text">Not Trashed</span>
                                 </a>
                             </li>
+
                             <li class="navi-item">
                                 <a href="{{ route('admins.report.xlsx') }}" class="navi-link">
                                     <span class="navi-icon">
@@ -116,7 +127,6 @@
                 <!--end::Button-->
             </div>
         </div>
-
         @livewire('admin-search-livewire', [
             'admins' => $admins,
         ])

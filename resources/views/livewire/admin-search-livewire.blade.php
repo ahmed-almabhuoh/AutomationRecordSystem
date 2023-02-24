@@ -1,18 +1,28 @@
 <div class="card-body">
     <!--begin: Search Form-->
     <!--begin::Search Form-->
+
     <div class="mb-7">
         <div class="row align-items-center">
             <div class="col-lg-9 col-xl-8">
                 <div class="row align-items-center">
                     <div class="col-md-4 my-2 my-md-0">
                         <div class="input-icon">
-                            <input type="text" wire:model="searchTerm" class="form-control" placeholder="Search ..."
+                            <input type="text" wire:model="searchTerm" class="form-control" placeholder="Search..."
                                 id="kt_datatable_search_query">
                             <span>
                                 <i class="flaticon2-search-1 text-muted"></i>
                             </span>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type
+                            <span class="text-danger">*</span></label>
+                        <select class="form-control" id="type" wire:model="type">
+                            <option value="all">All</option>
+                            <option value="only_trashed">Only Trashed</option>
+                            <option value="not_trashed">Not Trashed</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -21,6 +31,7 @@
             </div>
         </div>
     </div>
+
     <!--end::Search Form-->
     <!--end: Search Form-->
     <!--begin: Datatable-->
@@ -86,9 +97,11 @@
 
 
                         <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
-                            <span style="width: 121px;"><span class="label label-{{ $admin->admin_deletion_class }} label-dot mr-2">
+                            <span style="width: 121px;"><span
+                                    class="label label-{{ $admin->admin_deletion_class }} label-dot mr-2">
                                 </span>
-                                <span class="font-weight-bold text-{{ $admin->admin_deletion_class }}">{{ $admin->admin_deletion }}</span>
+                                <span
+                                    class="font-weight-bold text-{{ $admin->admin_deletion_class }}">{{ $admin->admin_deletion }}</span>
                             </span>
                         </td>
 
@@ -286,6 +299,5 @@
         </div>
     </div>
     <!--end: Datatable-->
-
 
 </div>

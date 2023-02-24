@@ -103,7 +103,6 @@ class Admin extends Authenticatable implements FromCollection, WithHeadings, Wit
         return $this->deleted_at == null ? 'success' : 'danger';
     }
 
-
     // Relations
     public function blocks()
     {

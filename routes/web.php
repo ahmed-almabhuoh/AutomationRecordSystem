@@ -46,6 +46,7 @@ Route::prefix('/')->middleware(['auth:manager,admin', 'activation'])->group(func
 
         // Block Routes
         Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');
+        Route::post('block/{blocked_id}/{guard}', [BlockController::class, 'store'])->name('blocks.store');
 
         Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout')->withoutMiddleware('activation');
     });

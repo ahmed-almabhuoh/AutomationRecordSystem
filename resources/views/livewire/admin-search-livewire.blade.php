@@ -7,8 +7,8 @@
                 <div class="row align-items-center">
                     <div class="col-md-4 my-2 my-md-0">
                         <div class="input-icon">
-                            <input type="text" wire:model="searchTerm"
-                                class="form-control" placeholder="Search ..." id="kt_datatable_search_query">
+                            <input type="text" wire:model="searchTerm" class="form-control" placeholder="Search ..."
+                                id="kt_datatable_search_query">
                             <span>
                                 <i class="flaticon2-search-1 text-muted"></i>
                             </span>
@@ -108,9 +108,13 @@
                                                     class="navi-link"> <span class="navi-icon"><i
                                                             class="la la-print"></i></span> <span
                                                         class="navi-text">Block list</span> </a> </li>
-                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
+                                            <li class="navi-item">
+                                                <a onclick="blockManager('{{ Crypt::encrypt($admin->id) }}')"
+                                                    class="navi-link" data-toggle="modal"
+                                                    data-target="#exampleModalCustomScrollable"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
-                                                        class="navi-text">Copy</span> </a> </li>
+                                                        class="navi-text">Settings</span> </a>
+                                            </li>
                                             <li class="navi-item"> <a
                                                     href="{{ route('admin.report.xlsx', Crypt::encrypt($admin->id)) }}"
                                                     class="navi-link"> <span class="navi-icon"><i
@@ -160,6 +164,107 @@
                                         </svg> </span> </button>
                             </span></td>
                     </tr>
+
+                    <div class="modal fade" id="exampleModalCustomScrollable" tabindex="-1" role="dialog"
+                        aria-labelledby="staticBackdrop" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modal-block-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div data-scroll="true" data-height="300">
+
+                                        <div class="card card-custom">
+                                            <div class="card-header card-header-tabs-line">
+                                                <div class="card-title">
+                                                    <h3 class="card-label">Related</h3>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <ul class="nav nav-tabs nav-bold nav-tabs-line">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active" data-toggle="tab"
+                                                                href="#kt_tab_pane_1_2">Last Block</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab"
+                                                                href="#kt_tab_pane_2_2">Block</a>
+                                                        </li>
+                                                        <li class="nav-item dropdown">
+                                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                                                                href="#" role="button" aria-haspopup="true"
+                                                                aria-expanded="false">Details</a>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                                                <a class="dropdown-item" data-toggle="tab"
+                                                                    href="#kt_tab_pane_3_2">About</a>
+                                                                {{-- <a class="dropdown-item" data-toggle="tab"
+                                                                    href="#kt_tab_pane_3_2">Another action</a>
+                                                                <a class="dropdown-item" data-toggle="tab"
+                                                                    href="#kt_tab_pane_3_2">Something else here</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" data-toggle="tab"
+                                                                    href="#kt_tab_pane_3_2">Separated link</a> --}}
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="tab-content">
+                                                    <div class="tab-pane fade show active" id="kt_tab_pane_1_2"
+                                                        role="tabpanel">
+
+                                                    </div>
+                                                    <div class="tab-pane fade" id="kt_tab_pane_2_2" role="tabpanel">
+
+                                                        <form action="">
+                                                            <div class="form-group mb-1">
+                                                                <label for="block_description">Block
+                                                                    description</label>
+                                                                <textarea class="form-control" id="block_description" rows="5"></textarea>
+                                                            </div>
+
+                                                            <div class="form-group mb-1">
+                                                                <label for="from_date">Block from</label>
+                                                                <input class="form-control" type="datetime-local"
+                                                                    value="2011-08-19T13:45:00" id="from_date" />
+                                                            </div>
+
+                                                            <div class="form-group mb-1">
+                                                                <label for="to_date">Block to</label>
+                                                                <input class="form-control" type="datetime-local"
+                                                                    value="2011-08-19T13:45:00" id="to_date" />
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                    <div class="tab-pane fade" id="kt_tab_pane_3_2" role="tabpanel">
+                                                        Third
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light-primary font-weight-bold"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="button"
+                                                onclick="blockAdmin('admin')"
+                                                class="btn btn-primary font-weight-bold">Save
+                                                changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
             </tbody>
         </table>
@@ -168,4 +273,6 @@
         </div>
     </div>
     <!--end: Datatable-->
+
+
 </div>

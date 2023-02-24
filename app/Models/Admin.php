@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable implements FromCollection, WithHeadings, WithStyles
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // Attributes
     protected $columns = [
@@ -85,6 +86,11 @@ class Admin extends Authenticatable implements FromCollection, WithHeadings, Wit
     public function getAdminGenderClassAttribute()
     {
         return $this->status === 'male' ? 'font-weight-bold text-primary' : 'font-weight-bold text-primary';
+    }
+
+    public function getLastBlockAttribute()
+    {
+        return $this->blocks->first();
     }
 
     // Relations

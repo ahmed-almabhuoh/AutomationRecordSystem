@@ -52,8 +52,7 @@
                             <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose
                                 an option:</li>
                             <li class="navi-item">
-                                <a href="#"
-                                    class="navi-link">
+                                <a href="#" class="navi-link">
                                     <span class="navi-icon">
                                         <i class="la la-print"></i>
                                     </span>
@@ -125,6 +124,68 @@
 @endsection
 
 @section('scripts')
+    <script>
+        let response = [];
+
+        function blockManager(id) {
+            const URL = 'http://127.0.0.1:8000/auto/';
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", URL + 'admins/' + id);
+            xhr.send();
+            xhr.responseType = "json";
+            xhr.onload = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    response = xhr.response;
+                    interactWithModal(response);
+                } else {
+                    toastr.error('Admin not found.');
+                }
+            };
+        }
+
+        function interactWithModal(response) {
+            if (response) {
+                document.getElementById('modal-block-title').innerHTML = 'Info: ' + response.admin.fname + " " + response
+                    .admin.lname;
+                console.log(response);
+
+                if (!response.last_block) {
+                    document.getElementById('kt_tab_pane_1_2').innerHTML = 'No data found ....';
+                }
+                document.getElementById('kt_tab_pane_1_2').innerHTML = `
+                    <p><h5 style="display: inline-block;">Posistion:  </h5>${response.last_block.position.toUpperCase()}</p>
+                    <p><h5 style="display: inline-block;">Status:  </h5>${response.last_block.status.toUpperCase()}</p>
+                    <p><h5 style="display: inline-block;">Description:  </h5>${response.last_block.description}</p>
+                    <p><h5 style="display: inline-block;">Blocked from:  </h5>${response.last_block.from}</p>
+                    <p><h5 style="display: inline-block;">Blocked to:  </h5>${response.last_block.to}</p>
+                `;
+            } else {
+                toastr.error('Admin not found.');
+            }
+        }
+
+        function blockAdmin(position = 'admin') {
+            let formData = new FormData();
+            formData.append('description', document.getElementById('block_description').value);
+            formData.append('from_date', document.getElementById('from_date').value);
+            formData.append('to_date', document.getElementById('to_date').value);
+
+            axios.post('/auto/block/' + response.admin.id + '/' + position, formData)
+                .then(function(response) {
+                    // handle success
+                    toastr.success(response.data.message);
+                })
+                .catch(function(error) {
+                    // handle error
+                    toastr.error(error.response.data.message);
+                })
+                .then(function() {
+                    // always executed
+                });
+        }
+    </script>
+
+
     <script>
         function confirmDestroy(id, refrance) {
             const swalWithBootstrapButtons = Swal.mixin({

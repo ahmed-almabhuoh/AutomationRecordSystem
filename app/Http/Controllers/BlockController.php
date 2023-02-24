@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Block;
 use App\Models\Manager;
+use Dotenv\Validator;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlockController extends Controller
 {
@@ -36,9 +40,55 @@ class BlockController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $blocked_id, $position = 'manager')
     {
+        // return response()->json([
+        //     'message' => $request->post('to_date'),
+        // ], 400);
+        $user = $this->getUser($blocked_id, $position);
+        $validator = Validator($request->only([
+            'block_description',
+            'from_date',
+            'to_date',
+        ]), [
+            'block_description' => 'nullable|min:5|max:150',
+            'from_date' => 'nullable',
+            'to_date' => 'nullable',
+        ]);
         //
+        if (!$validator->fails()) {
+
+            $isCreated = false;
+            DB::beginTransaction();
+            try {
+                $block = new Block();
+                $block->blocked_id = $user->id;
+                $block->description = $request->post('description');
+                $block->from = $request->post('from_date');
+                $block->to = $request->post('to_date');
+                $block->position = $position;
+                $isCreated = $block->save();
+
+                $user->status = 'blocked';
+                $user->save();
+
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+
+                return response()->json([
+                    'message' => 'Un-expected error!'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            return response()->json([
+                'message' => $isCreated ? 'Admin blocked successfully' : 'Failed to block admin, please try again!',
+            ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -62,10 +112,11 @@ class BlockController extends Controller
         ]);
     }
 
-    public function getUser ($id, $position = 'manager') {
+    public function getUser($id, $position = 'manager')
+    {
         if ($position === 'manager') {
             return Manager::findOrFail($id);
-        }else if ($position === 'admin') {
+        } else if ($position === 'admin') {
             return Admin::findOrFail($id);
         }
     }

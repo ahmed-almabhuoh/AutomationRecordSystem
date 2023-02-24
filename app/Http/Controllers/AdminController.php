@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\CreatingBlockAdminEvent;
 use App\Models\Admin;
+use App\Models\Block;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -121,9 +122,14 @@ class AdminController extends Controller
      * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show(Admin $admin)
+    public function show($id)
     {
+        $admin = Admin::findOrFail(Crypt::decrypt($id));
         //
+        return response()->json([
+            'admin' => $admin,
+            'last_block' => $admin->last_block ?? null,
+        ], Response::HTTP_OK);
     }
 
     /**

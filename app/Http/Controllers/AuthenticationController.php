@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\AuthenticatedGuards;
 use App\Models\Block;
 use App\Models\Manager;
+use App\Models\Supervisor;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,8 @@ class AuthenticationController extends Controller
 
         if (auth('admin')->check()) {
             $guard = 'admin';
+        } else if (auth('supervisor')->check()) {
+            $guard = 'supervisor';
         }
 
         $request->session()->invalidate();
@@ -144,6 +147,16 @@ class AuthenticationController extends Controller
                 ])->first();
             } else {
                 $user = Admin::where([
+                    ['identity_no', '=', $credintials['identity_no']],
+                ])->first();
+            }
+        } else if ($guard === 'supervisor') {
+            if ($key === 'email') {
+                $user = Supervisor::where([
+                    ['email', '=', $credintials['email']],
+                ])->first();
+            } else {
+                $user = Supervisor::where([
                     ['identity_no', '=', $credintials['identity_no']],
                 ])->first();
             }

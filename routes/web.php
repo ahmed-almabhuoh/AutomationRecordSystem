@@ -7,6 +7,7 @@ use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -29,6 +30,7 @@ Route::prefix('/')->middleware(['auth:manager,admin', 'activation', 'soft_delete
     Route::prefix('auto')->group(function () {
         Route::resource('managers', ManagerController::class);
         Route::resource('admins', AdminController::class);
+        Route::resource('supervisors', SupervisorController::class);
 
         Route::resource('branches', BranchController::class);
     });
@@ -43,6 +45,8 @@ Route::prefix('/')->middleware(['auth:manager,admin', 'activation', 'soft_delete
         Route::get('/branch/excel/report/{id}', [BranchController::class, 'getReportSpecificBranch'])->name('branch.report.xlsx');
         Route::get('/admin/excel/report', [AdminController::class, 'getReport'])->name('admins.report.xlsx');
         Route::get('/admin/excel/report/{id}', [AdminController::class, 'getReportSpecificAdmin'])->name('admin.report.xlsx');
+        Route::get('/supervisor/excel/report', [SupervisorController::class, 'getReport'])->name('supervisors.report.xlsx');
+        Route::get('/supervisor/excel/report/{id}', [SupervisorController::class, 'getReportSpecificSupervisor'])->name('supervisor.report.xlsx');
 
         // Block Routes
         Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

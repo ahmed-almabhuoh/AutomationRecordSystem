@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CreatingBlockAdminEvent;
-use App\Models\Admin;
+use App\Events\CreatingBlockSupervisorEvent;
 use App\Models\Block;
+use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\Password;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController extends Controller
+class SupervisorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,12 +22,11 @@ class AdminController extends Controller
     public function index()
     {
         //
-        $admins = Admin::paginate();
+        $supervisors = Supervisor::paginate();
 
-        return response()->view('backend.admins.index', [
-            'admins' => $admins,
+        return response()->view('backend.supervisors.index', [
+            'supervisors' => $supervisors,
         ]);
-        // return response()->view('backend.admins.index');
     }
 
     /**
@@ -38,7 +37,7 @@ class AdminController extends Controller
     public function create()
     {
         //
-        return response()->view('backend.admins.store');
+        return response()->view('backend.supervisors.store');
     }
 
     /**
@@ -68,11 +67,11 @@ class AdminController extends Controller
             'sname' => 'required|string|min:2|max:20',
             'tname' => 'required|string|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
-            'phone' => 'required|string|min:7|max:13|unique:admins,phone',
-            'email' => 'required|email|unique:admins,email',
+            'phone' => 'required|string|min:7|max:13|unique:supervisors,phone',
+            'email' => 'required|email|unique:supervisors,email',
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
-            'identity_no' => 'required|string|min:9|max:9|unique:admins,identity_no',
+            'identity_no' => 'required|string|min:9|max:9|unique:supervisors,identity_no',
             'password' => ['required', Password::min(8)->uncompromised()->letters()->numbers(), 'string', 'max:25'],
             'image' => 'nullable',
             'local_region' => 'nullable|min:5|max:50',
@@ -80,33 +79,33 @@ class AdminController extends Controller
         ]);
         //
         if (!$validator->fails()) {
-            $admin = new Admin();
-            $admin->fname = $request->post('fname');
-            $admin->sname = $request->post('sname');
-            $admin->tname = $request->post('tname');
-            $admin->lname = $request->post('lname');
-            $admin->phone = $request->post('phone');
-            $admin->identity_no = $request->post('identity_no');
-            $admin->email = $request->post('email');
-            $admin->password = Hash::make($request->post('password'));
-            $admin->gender = $request->post('gender');
-            $admin->status = $request->post('status');
-            $admin->local_region = $request->post('local_region') ?? null;
-            $admin->description = $request->post('description') ?? null;
+            $supervisor = new Supervisor();
+            $supervisor->fname = $request->post('fname');
+            $supervisor->sname = $request->post('sname');
+            $supervisor->tname = $request->post('tname');
+            $supervisor->lname = $request->post('lname');
+            $supervisor->phone = $request->post('phone');
+            $supervisor->identity_no = $request->post('identity_no');
+            $supervisor->email = $request->post('email');
+            $supervisor->password = Hash::make($request->post('password'));
+            $supervisor->gender = $request->post('gender');
+            $supervisor->status = $request->post('status');
+            $supervisor->local_region = $request->post('local_region') ?? null;
+            $supervisor->description = $request->post('description') ?? null;
             $image_path = null;
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $image_path = $file->store('user/admins', 'public');
+                $image_path = $file->store('user/supervisors', 'public');
             }
-            $admin->image = $image_path;
-            $isCreated = $admin->save();
+            $supervisor->image = $image_path;
+            $isCreated = $supervisor->save();
 
-            event(new CreatingBlockAdminEvent($request, $admin));
+            event(new CreatingBlockSupervisorEvent($request, $supervisor));
 
             return response()->json([
                 'message' => $isCreated
-                    ? 'Admin added successfully.'
-                    : 'Failed to add admin, please try again!'
+                    ? 'Supervisor added successfully.'
+                    : 'Failed to add supervisor, please try again!'
             ], $isCreated
                 ? Response::HTTP_CREATED
                 : Response::HTTP_BAD_REQUEST);
@@ -120,19 +119,20 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $admin = Admin::findOrFail(Crypt::decrypt($id));
-        $last_block = Block::where([
-            ['blocked_id', '=', $admin->id],
-            ['position', '=', Admin::POSITION],
-        ])->orderBy('created_at', 'DESC')->first();
+        $supervisor = Supervisor::findOrFail(Crypt::decrypt($id));
         //
+        $last_block = Block::where([
+            ['blocked_id', '=', $supervisor->id],
+            ['position', '=', Supervisor::POSITION],
+        ])->orderBy('created_at', 'DESC')->first();
+
         return response()->json([
-            'admin' => $admin,
+            'supervisor' => $supervisor,
             'last_block' => $last_block ?? null,
         ], Response::HTTP_OK);
     }
@@ -140,15 +140,15 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $admin = Admin::findOrFail(Crypt::decrypt($id));
+        $supervisor = Supervisor::findOrFail(Crypt::decrypt($id));
         //
-        return response()->view('backend.admins.update', [
-            'admin' => $admin
+        return response()->view('backend.supervisors.update', [
+            'supervisor' => $supervisor
         ]);
     }
 
@@ -156,12 +156,12 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $admin = Admin::findOrFail(Crypt::decrypt($id));
+        $supervisor = Supervisor::findOrFail(Crypt::decrypt($id));
         $validator = Validator($request->only([
             'fname',
             'sname',
@@ -181,11 +181,11 @@ class AdminController extends Controller
             'sname' => 'required|string|min:2|max:20',
             'tname' => 'required|string|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
-            'phone' => 'required|string|min:7|max:13|unique:admins,phone,' . $admin->id,
-            'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'phone' => 'required|string|min:7|max:13|unique:supervisors,phone,' . $supervisor->id,
+            'email' => 'required|email|unique:supervisors,email,' . $supervisor->id,
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
-            'identity_no' => 'required|string|min:9|max:9|unique:admins,identity_no,' . $admin->id,
+            'identity_no' => 'required|string|min:9|max:9|unique:supervisors,identity_no,' . $supervisor->id,
             'password' => ['nullable', Password::min(8)->uncompromised()->letters()->numbers(), 'max:25'],
             'image' => 'nullable',
             'local_region' => 'nullable|min:5|max:50',
@@ -193,32 +193,32 @@ class AdminController extends Controller
         ]);
         //
         if (!$validator->fails()) {
-            $admin->fname = $request->post('fname');
-            $admin->sname = $request->post('sname');
-            $admin->tname = $request->post('tname');
-            $admin->lname = $request->post('lname');
-            $admin->phone = $request->post('phone');
-            $admin->identity_no = $request->post('identity_no');
-            $admin->email = $request->post('email');
+            $supervisor->fname = $request->post('fname');
+            $supervisor->sname = $request->post('sname');
+            $supervisor->tname = $request->post('tname');
+            $supervisor->lname = $request->post('lname');
+            $supervisor->phone = $request->post('phone');
+            $supervisor->identity_no = $request->post('identity_no');
+            $supervisor->email = $request->post('email');
             if ($request->post('password')) {
-                $admin->password = Hash::make($request->post('password'));
+                $supervisor->password = Hash::make($request->post('password'));
             }
-            $admin->gender = $request->post('gender');
-            $admin->status = $request->post('status');
-            $admin->local_region = $request->post('local_region') ?? null;
-            $admin->description = $request->post('description') ?? null;
+            $supervisor->gender = $request->post('gender');
+            $supervisor->status = $request->post('status');
+            $supervisor->local_region = $request->post('local_region') ?? null;
+            $supervisor->description = $request->post('description') ?? null;
             $image_path = null;
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $image_path = $file->store('user/admins', 'public');
-                $admin->image = $image_path;
+                $image_path = $file->store('user/supervisors', 'public');
+                $supervisor->image = $image_path;
             }
-            $isUpdated = $admin->save();
+            $isUpdated = $supervisor->save();
 
             return response()->json([
                 'message' => $isUpdated
-                    ? 'Admin updated successfully.'
-                    : 'Failed to update admin, please try again!'
+                    ? 'Supervisor updated successfully.'
+                    : 'Failed to update supervisor, please try again!'
             ], $isUpdated
                 ? Response::HTTP_OK
                 : Response::HTTP_BAD_REQUEST);
@@ -232,37 +232,37 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $admin = Admin::findOrFail(Crypt::decrypt($id));
+        $supervisor = Supervisor::findOrFail(Crypt::decrypt($id));
         //
-        if ($admin->delete()) {
+        if ($supervisor->delete()) {
             return response()->json([
                 'title' => 'Deleted',
-                'text' => 'Admin deleted successfully.',
+                'text' => 'Supervisor deleted successfully.',
                 'icon' => 'success',
             ], Response::HTTP_OK);
         } else {
             return response()->json([
                 'title' => 'Failed!',
-                'text' => 'Failed to delete admin, please try again!',
+                'text' => 'Failed to delete supervisor, please try again!',
                 'icon' => 'error',
             ], Response::HTTP_BAD_REQUEST);
         }
     }
 
-    // Get admins report
+    // Get supervisors report
     public function getReport()
     {
-        return Excel::download(new Admin(), 'admins.xlsx');
+        return Excel::download(new Supervisor(), 'supervisors.xlsx');
     }
 
-    // Get admin report
-    public function getReportSpecificAdmin($id)
+    // Get supervisor report
+    public function getReportSpecificSupervisor($id)
     {
-        return Excel::download(new Admin(Crypt::decrypt($id)), 'admin.xlsx');
+        return Excel::download(new Supervisor(Crypt::decrypt($id)), 'supervisor.xlsx');
     }
 }

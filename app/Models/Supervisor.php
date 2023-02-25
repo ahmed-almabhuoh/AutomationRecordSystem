@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Manager extends Authenticatable implements FromCollection, WithHeadings, WithStyles
+class Supervisor extends Authenticatable implements FromCollection, WithHeadings, WithStyles
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
 
     // Attributes
     protected $columns = [
@@ -33,23 +33,25 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
         'updated_at',
         'created_at',
     ];
-    const POSITION = 'manager';
-    protected $manager_id;
+    const POSITION = 'supervisor';
+    protected $supervisor_id;
     const GENDER = ['male', 'female'];
     const STATUS = ['active', 'draft', 'blocked'];
+    protected $guarded = [];
 
-    public function __construct($manager_id = 0)
+
+    public function __construct($supervisor_id = 0)
     {
-        $this->manager_id = $manager_id;
+        $this->supervisor_id = $supervisor_id;
     }
 
     public function collection()
     {
-        if (!$this->manager_id) {
-            return Manager::select($this->columns)->get();
+        if (!$this->supervisor_id) {
+            return Supervisor::select($this->columns)->get();
         } else {
-            return Manager::select($this->columns)
-                ->where('id', '=', $this->manager_id)
+            return Supervisor::select($this->columns)
+                ->where('id', '=', $this->supervisor_id)
                 ->get();
         }
     }
@@ -72,7 +74,7 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
         return $this->fname . ' ' . $this->sname . ' ' . $this->tname . ' ' . $this->lname;
     }
 
-    public function getManagerStatusClassAttribute()
+    public function getSupervisorStatusClassAttribute()
     {
         $class = 'label font-weight-bold label-lg  label-light-success label-inline';
         if ($this->status === 'blocked') {
@@ -83,22 +85,29 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
         return $class;
     }
 
-    public function getManagerGenderClassAttribute()
+    public function getSupervisorGenderClassAttribute()
     {
         return $this->status === 'male' ? 'font-weight-bold text-primary' : 'font-weight-bold text-primary';
+    }
+
+    public function getLastBlockAttribute()
+    {
+        return $this->blocks->first();
+    }
+
+    public function getSupervisorDeletionAttribute()
+    {
+        return $this->deleted_at == null ? 'F' : 'T';
+    }
+
+    public function getSupervisorDeletionClassAttribute()
+    {
+        return $this->deleted_at == null ? 'success' : 'danger';
     }
 
     // Relations
     public function blocks()
     {
         return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
-    }
-
-    // Scopes
-    protected static function booted()
-    {
-        static::addGlobalScope('withoutSuper', function (Builder $builder) {
-            $builder->where('email', '!=', 'super@auto.com.ps');
-        });
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Block;
 use App\Models\Manager;
+use App\Models\Supervisor;
 use Dotenv\Validator;
 use Exception;
 use Illuminate\Http\Request;
@@ -81,6 +82,7 @@ class BlockController extends Controller
                 ], Response::HTTP_BAD_REQUEST);
             }
 
+
             return response()->json([
                 'message' => $isCreated ? 'Admin blocked successfully' : 'Failed to block admin, please try again!',
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
@@ -114,10 +116,12 @@ class BlockController extends Controller
 
     public function getUser($id, $position = 'manager')
     {
-        if ($position === 'manager') {
+        if ($position === Manager::POSITION) {
             return Manager::findOrFail($id);
-        } else if ($position === 'admin') {
+        } else if ($position === Admin::POSITION) {
             return Admin::findOrFail($id);
+        }else if ($position === Supervisor::POSITION) {
+            return Supervisor::findOrFail($id);
         }
     }
 

@@ -11,7 +11,7 @@ class Block extends Model
 
     // Attributes
     const POSITIONS = [
-        'manager', 'admin'
+        'manager', 'admin', 'supervisor'
     ];
     const STATUS = [
         'active', 'disable'
@@ -34,5 +34,15 @@ class Block extends Model
     public function manager()
     {
         return $this->belongsTo(Manager::class, 'blocked_id', 'id');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'blocked_id', 'id');
+    }
+
+    public function supervisor()
+    {
+        return $this->belongsTo(Supervisor::class, 'blocked_id', 'id');
     }
 }

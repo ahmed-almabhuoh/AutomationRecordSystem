@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Block;
+use App\Models\Keeper;
 use App\Models\Manager;
 use App\Models\Supervisor;
 use Dotenv\Validator;
@@ -122,6 +123,8 @@ class BlockController extends Controller
             return Admin::findOrFail($id);
         }else if ($position === Supervisor::POSITION) {
             return Supervisor::findOrFail($id);
+        }else if ($position === Keeper::POSITION) {
+            return Keeper::findOrFail($id);
         }
     }
 

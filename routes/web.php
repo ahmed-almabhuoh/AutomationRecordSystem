@@ -27,7 +27,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 //     return view('welcome');
 // });
 
-Route::prefix('/')->middleware(['auth:manager,admin,supervisor', 'activation', 'soft_deleted'])
+Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activation', 'soft_deleted'])
     ->group(function () {
         Route::prefix('auto')->group(function () {
             Route::resource('managers', ManagerController::class);
@@ -61,7 +61,7 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor', 'activation', '
         });
     });
 
-Route::prefix('auto')->middleware(['guest:manager,admin,supervisor'])->group(function () {
+Route::prefix('auto')->middleware(['guest:manager,admin,supervisor,keeper'])->group(function () {
     Route::get('{guard}/login', [AuthenticationController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthenticationController::class, 'login']);
 });

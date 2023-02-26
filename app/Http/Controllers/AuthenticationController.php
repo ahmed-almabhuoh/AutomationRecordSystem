@@ -7,6 +7,7 @@ use App\Listeners\AuthenticatedDraftUserListener;
 use App\Models\Admin;
 use App\Models\AuthenticatedGuards;
 use App\Models\Block;
+use App\Models\Keeper;
 use App\Models\Manager;
 use App\Models\Supervisor;
 use Dotenv\Validator;
@@ -89,6 +90,8 @@ class AuthenticationController extends Controller
             $guard = 'admin';
         } else if (auth('supervisor')->check()) {
             $guard = 'supervisor';
+        }else if (auth('keeper')->check()) {
+            $guard = 'keeper';
         }
 
         $request->session()->invalidate();
@@ -157,6 +160,16 @@ class AuthenticationController extends Controller
                 ])->first();
             } else {
                 $user = Supervisor::where([
+                    ['identity_no', '=', $credintials['identity_no']],
+                ])->first();
+            }
+        } else if ($guard === 'keeper') {
+            if ($key === 'email') {
+                $user = Keeper::where([
+                    ['email', '=', $credintials['email']],
+                ])->first();
+            } else {
+                $user = Keeper::where([
                     ['identity_no', '=', $credintials['identity_no']],
                 ])->first();
             }

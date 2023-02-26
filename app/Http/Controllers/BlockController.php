@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Block;
 use App\Models\Keeper;
 use App\Models\Manager;
+use App\Models\Student;
 use App\Models\StudentParent;
 use App\Models\Supervisor;
 use Dotenv\Validator;
@@ -128,6 +129,8 @@ class BlockController extends Controller
             return Keeper::findOrFail($id);
         } else if ($position === StudentParent::POSITION) {
             return StudentParent::findOrFail($id);
+        } else if ($position === Student::POSITION) {
+            return Student::findOrFail($id);
         }
     }
 

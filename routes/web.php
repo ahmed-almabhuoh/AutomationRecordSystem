@@ -8,6 +8,7 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\KeeperController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentParentController;
 use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::resource('supervisors', SupervisorController::class);
             Route::resource('keepers', KeeperController::class);
             Route::resource('student_parents', StudentParentController::class);
+            Route::resource('students', StudentController::class);
 
             Route::resource('branches', BranchController::class);
         });
@@ -56,6 +58,8 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::get('/keeper/excel/report/{id}', [KeeperController::class, 'getReportSpecificKeeper'])->name('keeper.report.xlsx');
             Route::get('/student_parent/excel/report', [StudentParentController::class, 'getReport'])->name('student_parents.report.xlsx');
             Route::get('/student_parent/excel/report/{id}', [StudentParentController::class, 'getReportSpecificStudentParent'])->name('student_parent.report.xlsx');
+            Route::get('/students/excel/report', [StudentController::class, 'getReport'])->name('students.report.xlsx');
+            Route::get('/students/excel/report/{id}', [StudentController::class, 'getReportSpecificStudent'])->name('student.report.xlsx');
 
             // Block Routes
             Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

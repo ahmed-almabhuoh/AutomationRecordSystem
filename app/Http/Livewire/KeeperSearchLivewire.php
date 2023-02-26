@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 
 class KeeperSearchLivewire extends Component
 {
-    use WithPagination;
+    // use WithPagination;
 
     public function __construct()
     {

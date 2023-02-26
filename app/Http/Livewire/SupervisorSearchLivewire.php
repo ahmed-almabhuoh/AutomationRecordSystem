@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 
 class SupervisorSearchLivewire extends Component
 {
-    use WithPagination;
+    // use WithPagination;
 
     public function __construct()
     {

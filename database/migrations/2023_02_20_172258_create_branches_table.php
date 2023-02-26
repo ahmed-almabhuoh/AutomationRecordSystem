@@ -20,6 +20,7 @@ class CreateBranchesTable extends Migration
             $table->string('image')->nullable();
             $table->enum('status', Branch::STATUS);
             $table->text('region', 50)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

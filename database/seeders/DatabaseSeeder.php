@@ -30,17 +30,17 @@ class DatabaseSeeder extends Seeder
         //     'status' => 'active',
         // ]);
 
-        $manager = new Manager();
-        $manager->fname = 'Super';
-        $manager->sname = 'Super';
-        $manager->tname = 'Super';
-        $manager->lname = 'Super';
-        $manager->email = 'super@auto.com.ps';
-        $manager->identity_no = '123456789';
-        $manager->phone = '0567077653';
-        $manager->gender = 'male';
-        $manager->status = 'active';
-        $manager->password = Hash::make('password');
-        $manager->save();
+        // $manager = new Manager();
+        // $manager->fname = 'Super';
+        // $manager->sname = 'Super';
+        // $manager->tname = 'Super';
+        // $manager->lname = 'Super';
+        // $manager->email = 'super@auto.com.ps';
+        // $manager->identity_no = '123456789';
+        // $manager->phone = '0567077653';
+        // $manager->gender = 'male';
+        // $manager->status = 'active';
+        // $manager->password = Hash::make('password');
+        // $manager->save();
     }
 }

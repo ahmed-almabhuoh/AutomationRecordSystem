@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -11,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 
 class Branch extends Model implements FromCollection, WithHeadings, WithStyles
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // Attributes
     const STATUS = ['active', 'pending', 'inactive'];
@@ -62,5 +63,15 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
             $class = 'label font-weight-bold label-lg  label-light-info label-inline';
         }
         return $class;
+    }
+
+    public function getBranchDeletionAttribute()
+    {
+        return $this->deleted_at == null ? 'F' : 'T';
+    }
+
+    public function getBranchDeletionClassAttribute()
+    {
+        return $this->deleted_at == null ? 'success' : 'danger';
     }
 }

@@ -17,10 +17,10 @@ class ManagerFactory extends Factory
     {
         return [
             //
-            'fname' => $this->faker->firstName(),
-            'sname' => $this->faker->firstName(),
-            'tname' => $this->faker->firstName(),
-            'lname' => $this->faker->firstName(),
+            'fname' => $this->faker->name(),
+            'sname' => $this->faker->name(),
+            'tname' => $this->faker->name(),
+            'lname' => $this->faker->name(),
             'email' => $this->faker->email(),
             'phone' => $this->faker->numberBetween(1000000, 99999999),
             'identity_no' => $this->faker->numberBetween(100000000, 999999999),

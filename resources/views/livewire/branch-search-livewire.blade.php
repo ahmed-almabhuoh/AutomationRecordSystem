@@ -14,6 +14,15 @@
                             </span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="type">Type
+                            <span class="text-danger">*</span></label>
+                        <select class="form-control" id="type" wire:model="type">
+                            <option value="all">All</option>
+                            <option value="only_trashed">Only Trashed</option>
+                            <option value="not_trashed">Not Trashed</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
@@ -37,6 +46,8 @@
                             style="width: 121px;">Region</span></th>
                     <th data-field="Status" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Status</span></th>
+                    <th data-field="Type" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
+                        <span style="width: 121px;">Deleted</span>
                     <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
                         <span style="width: 125px;">Actions</span>
                     </th>
@@ -67,6 +78,17 @@
                         <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
                                     class="{{ $branch->branch_status_class }}">{{ ucfirst($branch->status) }}</span></span>
                         </td>
+
+                        <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
+                            <span style="width: 121px;"><span
+                                    class="label label-{{ $branch->branch_deletion_class }} label-dot mr-2">
+                                </span>
+                                <span
+                                    class="font-weight-bold text-{{ $branch->branch_deletion_class }}">{{ $branch->branch_deletion }}</span>
+                            </span>
+                        </td>
+
+
                         <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
                             class="datatable-cell"><span style="overflow: visible; position: relative; width: 125px;">
                                 <div class="dropdown dropdown-inline"> <a href="javascript:;"
@@ -74,8 +96,10 @@
                                             class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                                                 viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24">
+                                                <g stroke="none" stroke-width="1" fill="none"
+                                                    fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24"
+                                                        height="24">
                                                     </rect>
                                                     <path
                                                         d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"

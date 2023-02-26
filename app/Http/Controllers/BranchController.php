@@ -54,7 +54,7 @@ class BranchController extends Controller
             'region' => 'nullable|min:5|max:50',
             'image' => 'nullable',
         ]);
-        // 
+        //
         if (!$validator->fails()) {
             $branch = new Branch();
             $branch->name = $request->post('name');
@@ -63,7 +63,7 @@ class BranchController extends Controller
             $image_path = null;
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $image_path = $file->store('user/branches', 'public');
+                $image_path = $file->store('content/branches', 'public');
             }
             $branch->image = $image_path;
             $isCreated = $branch->save();
@@ -118,7 +118,7 @@ class BranchController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $branch = Branch::findOrFail(Crypt::encrypt($id));
+        $branch = Branch::findOrFail(Crypt::decrypt($id));
         $validator = Validator($request->only([
             'name',
             'status',
@@ -130,16 +130,16 @@ class BranchController extends Controller
             'region' => 'nullable|min:5|max:50',
             'image' => 'nullable',
         ]);
-        // 
+        //
         if (!$validator->fails()) {
             $branch->name = $request->post('name');
             $branch->status = $request->post('status');
             $branch->region = $request->post('region');
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $image_path = $file->store('user/branches', 'public');
+                $image_path = $file->store('content/branches', 'public');
+                $branch->image = $image_path;
             }
-            $branch->image = $image_path;
             $isUpdated = $branch->save();
 
 

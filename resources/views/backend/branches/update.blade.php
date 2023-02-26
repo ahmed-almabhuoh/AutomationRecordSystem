@@ -58,7 +58,7 @@
                                 data-action="change" data-toggle="tooltip" title=""
                                 data-original-title="Change avatar">
                                 <i class="fa fa-pen icon-sm text-muted"></i>
-                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                                <input type="file" name="profile_avatar" id="image" accept=".png, .jpg, .jpeg">
                                 <input type="hidden" name="profile_avatar_remove">
                             </label>
                             <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
@@ -93,10 +93,11 @@
 
         function update(id) {
             const formData = new FormData();
+            formData.append('_method', 'PUT');
             formData.append('name', document.getElementById('name').value);
             formData.append('status', document.getElementById('status').value);
             formData.append('region', document.getElementById('region').value);
-            // formData.append('image', document.getElementById('image').files[0]);
+            formData.append('image', document.getElementById('image').files[0]);
 
 
             axios.post('/auto/branches/' + id, formData)

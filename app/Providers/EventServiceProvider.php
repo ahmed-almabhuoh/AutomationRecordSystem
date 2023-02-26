@@ -6,11 +6,13 @@ use App\Events\AuthenticatedDraftUserEvent;
 use App\Events\CreatingBlockAdminEvent;
 use App\Events\CreatingBlockKeeperEvent;
 use App\Events\CreatingBlockManagerEvent;
+use App\Events\CreatingBlockStudentParentEvent;
 use App\Events\CreatingBlockSupervisorEvent;
 use App\Listeners\AuthenticatedDraftUserListener;
 use App\Listeners\CreatingBlockAdminListener;
 use App\Listeners\CreatingBlockKeeperListener;
 use App\Listeners\CreatingBlockManagerListener;
+use App\Listeners\CreatingBlockStudentParentListener;
 use App\Listeners\CreatingBlockSupervisorListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -43,6 +45,10 @@ class EventServiceProvider extends ServiceProvider
 
         CreatingBlockKeeperEvent::class => [
             CreatingBlockKeeperListener::class,
+        ],
+
+        CreatingBlockStudentParentEvent::class => [
+            CreatingBlockStudentParentListener::class,
         ],
 
         AuthenticatedDraftUserEvent::class => [

@@ -93,6 +93,10 @@ class Manager extends Authenticatable implements FromCollection, WithHeadings, W
     {
         return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
     }
+    public function apis()
+    {
+        return $this->hasMany(APIKEY::class, 'manager_id', 'id');
+    }
 
     // Scopes
     protected static function booted()

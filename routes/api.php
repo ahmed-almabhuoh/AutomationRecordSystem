@@ -31,4 +31,4 @@ Route::prefix('auto')->group(function () {
     });
 });
 
-Route::put('test', [AdminController::class, 'test']);
+Route::post('test', [AdminController::class, 'test']);

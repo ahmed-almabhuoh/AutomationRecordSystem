@@ -15,7 +15,8 @@ class AdminController extends Controller
     public function test(Request $request)
     {
         return response()->json([
-            'name' => $request->hasFile('name')
+            'image' => $request->hasFile('image'),
+            'name' => $request->input('name')
         ]);
     }
     /**

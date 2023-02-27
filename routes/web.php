@@ -2,6 +2,7 @@
 
 use App\Events\CreatingBlockManagerEvent;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\APIKEYController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\BlockController;
@@ -38,6 +39,7 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::resource('keepers', KeeperController::class);
             Route::resource('student_parents', StudentParentController::class);
             Route::resource('students', StudentController::class);
+            Route::resource('apis', APIKEYController::class);
 
             Route::resource('branches', BranchController::class);
         });

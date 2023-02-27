@@ -62,6 +62,8 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::get('/student_parent/excel/report/{id}', [StudentParentController::class, 'getReportSpecificStudentParent'])->name('student_parent.report.xlsx');
             Route::get('/students/excel/report', [StudentController::class, 'getReport'])->name('students.report.xlsx');
             Route::get('/students/excel/report/{id}', [StudentController::class, 'getReportSpecificStudent'])->name('student.report.xlsx');
+            Route::get('/apis/excel/report', [APIKEYController::class, 'getReport'])->name('apis.report.xlsx');
+            Route::get('/apis/excel/report/{id}', [APIKEYController::class, 'getReportSpecificAPI'])->name('api.report.xlsx');
 
             // Block Routes
             Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

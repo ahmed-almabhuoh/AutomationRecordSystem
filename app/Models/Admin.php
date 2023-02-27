@@ -36,8 +36,22 @@ class Admin extends Authenticatable implements FromCollection, WithHeadings, Wit
     protected $admin_id;
     const GENDER = ['male', 'female'];
     const STATUS = ['active', 'draft', 'blocked'];
-    protected $guarded = [];
-
+    protected $fillable = [
+        'id',
+        'fname',
+        'sname',
+        'tname',
+        'lname',
+        'email',
+        'phone',
+        'identity_no',
+        'gender',
+        'status',
+        'local_region',
+        'description',
+        'password',
+    ];
+    protected $hidden = ['password'];
 
     public function __construct($admin_id = 0)
     {

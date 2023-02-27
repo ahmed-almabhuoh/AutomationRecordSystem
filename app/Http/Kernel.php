@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Activation;
 use App\Http\Middleware\DenyDeleted;
+use App\Http\Middleware\VerifyApiKey;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            VerifyApiKey::class,
         ],
     ];
 

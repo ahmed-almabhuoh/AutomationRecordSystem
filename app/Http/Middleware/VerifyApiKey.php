@@ -44,7 +44,7 @@ class VerifyApiKey
                 }
                 if ($api->rat_limit == 1) {
                     return response()->json([
-                        'message' => 'RAT Limit End! Please re-Charge your request balance from out Web-Portal URL: http://127.0.0.1:8000/auto/manager/login',
+                        'message' => 'RAT Limit End! Please re-Charge your request balance from out Web-Portal URL: ' . env('APP_URL') . '/auto/manager/login',
                     ], 401);
                 } else {
                     if ($api->rat_limit !== 0) {

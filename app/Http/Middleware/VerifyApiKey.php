@@ -36,11 +36,25 @@ class VerifyApiKey
                 return response()->json([
                     'message' => 'Access denied!',
                 ], 403);
-            }else {
+            } else {
                 if ($api->status != 'active' || $api->deleted_at) {
                     return response()->json([
                         'message' => 'Access is specified!',
                     ], 401);
+                }
+                if ($api->rat_limit == 1) {
+                    return response()->json([
+                        'message' => 'RAT Limit End! Please re-Charge your request balance from out Web-Portal URL: http://127.0.0.1:8000/auto/manager/login',
+                    ], 401);
+                } else {
+                    if ($api->rat_limit !== 0) {
+                        APIKEY::where([
+                            ['key', '=', $key],
+                            ['id', '=', $uuid],
+                        ])->update([
+                            'rat_limit' => $api->rat_limit - 1,
+                        ]);
+                    }
                 }
             }
         }

@@ -109,16 +109,14 @@
                                             <li
                                                 class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                                 Choose an action: </li>
-                                            <li class="navi-item"> <a
-                                                    href="#"
-                                                    class="navi-link"> <span class="navi-icon"><i
-                                                            class="la la-print"></i></span> <span
+                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
+                                                        class="navi-icon"><i class="la la-print"></i></span> <span
                                                         class="navi-text">Block list</span> </a> </li>
                                             <li class="navi-item"> <a href="#" class="navi-link"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
                                                         class="navi-text">Copy</span> </a> </li>
                                             <li class="navi-item"> <a
-                                                    href="{{ route('api.report.xlsx', Crypt::encrypt($api->id)) }}"
+                                                    href="{{ route('api.report.xlsx', Crypt::encrypt($api->key)) }}"
                                                     class="navi-link"> <span class="navi-icon"><i
                                                             class="la la-file-excel-o"></i></span>
                                                     <span class="navi-text">Excel</span> </a> </li>
@@ -148,7 +146,7 @@
                                                 </rect>
                                             </g>
                                         </svg> </span> </a> <button type="button"
-                                    onclick="confirmDestroy('{{ Crypt::encrypt($api->id) }}', this)"
+                                    onclick="confirmDestroy('{{ Crypt::encrypt($api->key) }}', this)"
                                     class="btn btn-sm btn-clean btn-icon" title="Delete"> <span
                                         class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"

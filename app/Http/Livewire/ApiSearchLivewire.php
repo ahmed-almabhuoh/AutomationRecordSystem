@@ -26,13 +26,6 @@ class ApiSearchLivewire extends Component
 
     public function render()
     {
-        // $this->admins = Admin::where(function ($query) {
-        //     $query->where('fname', 'LIKE', '%' . $this->searchTerm . '%')
-        //         ->orWhere('sname', 'LIKE', '%' . $this->searchTerm . '%')
-        //         ->orWhere('tname', 'LIKE', '%' . $this->searchTerm . '%')
-        //         ->orWhere('lname', 'LIKE', '%' . $this->searchTerm . '%');
-        // })->paginate(10);
-
 
         if ($this->type === 'all') {
             $this->apis = APIKEY::where(function ($query) {
@@ -57,7 +50,6 @@ class ApiSearchLivewire extends Component
 
         return view('livewire.api-search-livewire', [
             'apis' => $this->apis,
-            // 'paginationView' => 'livewire.custom-pagination',
         ]);
     }
 }

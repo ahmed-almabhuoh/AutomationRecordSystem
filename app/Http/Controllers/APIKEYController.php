@@ -169,9 +169,21 @@ class APIKEYController extends Controller
      * @param  \App\Models\APIKEY  $aPIKEY
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($key)
     {
-        $api = APIKEY::findOrFail(Crypt::decrypt($id));
+        // return response()->json([
+        //     'text' => Crypt::decrypt($id),
+        // ], 400);
+        // $api = APIKEY::find($id);
+        $api = APIKEY::where('key', '=', Crypt::decrypt($key))->first();
+        // $api = APIKEY::find($id);
+        if (is_null($api)) {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Error!',
+                'text' => 'Access to unavailable resources!',
+            ], 400);
+        }
         //
         if ($api->delete()) {
             return response()->json([
@@ -195,10 +207,10 @@ class APIKEYController extends Controller
     }
 
     // Get manager report
-    public function getReportSpecificAPI($id)
+    public function getReportSpecificAPI($key)
     {
         // $manager = Manager::findOrFail(Crypt::decrypt($id));
         // $manager = Manager::find(Crypt::decrypt($id));
-        return Excel::download(new APIKEY(Crypt::decrypt($id)), 'API.xlsx');
+        return Excel::download(new APIKEY(Crypt::decrypt($key)), 'API.xlsx');
     }
 }

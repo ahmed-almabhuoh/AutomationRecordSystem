@@ -29,7 +29,7 @@ class APIKEY extends Model implements FromCollection, WithHeadings, WithStyles
         'deleted_at',
     ];
     const POSITION = 'api';
-    protected $api_id;
+    protected $api_key;
     const STATUS = ['active', 'disabled'];
     protected $fillable = [
         'id',
@@ -40,18 +40,18 @@ class APIKEY extends Model implements FromCollection, WithHeadings, WithStyles
     ];
     protected $hidden = ['secret'];
 
-    public function __construct($api_id = 0)
+    public function __construct($api_key = 0)
     {
-        $this->api_id = $api_id;
+        $this->api_key = $api_key;
     }
 
     public function collection()
     {
-        if (!$this->api_id) {
+        if (!$this->api_key) {
             return APIKEY::select($this->columns)->get();
         } else {
             return APIKEY::select($this->columns)
-                ->where('id', '=', $this->api_id)
+                ->where('key', '=', $this->api_key)
                 ->get();
         }
     }

@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="type">Type
+                        <label for="type">Deletion
                             <span class="text-danger">*</span></label>
                         <select class="form-control" id="type" wire:model="type">
                             <option value="all">All</option>
@@ -23,6 +23,16 @@
                             <option value="not_trashed">Not Trashed</option>
                         </select>
                     </div>
+
+                    {{-- <div class="form-group">
+                        <label for="type">Type
+                            <span class="text-danger">*</span></label>
+                        <select class="form-control" id="sc_type" wire:model="sc_type">
+                            <option value="">All</option>
+                            <option value="PaQ">PaQ</option>
+                            <option value="Memorization">Memorization</option>
+                        </select>
+                    </div> --}}
                 </div>
             </div>
             <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
@@ -41,6 +51,8 @@
                     <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Name</span></th>
                     <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                            style="width: 121px;">Type</span></th>
+                    <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Image</span></th>
                     <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Region</span></th>
@@ -54,37 +66,40 @@
                 </tr>
             </thead>
             <tbody class="datatable-body" style="">
-                @if (!count($branches))
+                @if (!count($supervision_committees))
                     <tr>
                         <td colspan="5">
                             <p>No data found ...</p>
                         </td>
                     </tr>
                 @endif
-                @foreach ($branches as $branch)
+                @foreach ($supervision_committees as $supervision_committee)
                     <tr data-row="0" class="datatable-row" style="left: 0px;">
                         <td data-field="Country" aria-label="China" class="datatable-cell"><span
-                                style="width: 121px;">{{ $branch->name }}</span></td>
+                                style="width: 121px;">{{ $supervision_committee->name }}</span></td>
+                        <td data-field="Country" aria-label="China" class="datatable-cell"><span
+                                style="width: 121px;">{{ $supervision_committee->type }}</span></td>
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;">
-                                @if ($branch->image)
-                                    <img src="{{ Storage::url($branch->image) }}" id="branch-image" alt="-">
+                                @if ($supervision_committee->image)
+                                    <img src="{{ Storage::url($supervision_committee->image) }}"
+                                        id="supervision_committee-image" alt="-">
                                 @else
                                     -
                                 @endif
                             </span></td>
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
-                                style="width: 121px;">{{ $branch->region }}</span></td>
+                                style="width: 121px;">{{ $supervision_committee->region }}</span></td>
                         <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
-                                    class="{{ $branch->branch_status_class }}">{{ ucfirst($branch->status) }}</span></span>
+                                    class="{{ $supervision_committee->s_c_status_class }}">{{ ucfirst($supervision_committee->status) }}</span></span>
                         </td>
 
                         <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
                             <span style="width: 121px;"><span
-                                    class="label label-{{ $branch->branch_deletion_class }} label-dot mr-2">
+                                    class="label label-{{ $supervision_committee->s_c_deletion_class }} label-dot mr-2">
                                 </span>
                                 <span
-                                    class="font-weight-bold text-{{ $branch->branch_deletion_class }}">{{ $branch->branch_deletion }}</span>
+                                    class="font-weight-bold text-{{ $supervision_committee->s_c_deletion_class }}">{{ $supervision_committee->s_c_deletion }}</span>
                             </span>
                         </td>
 
@@ -94,8 +109,8 @@
                                 <div class="dropdown dropdown-inline"> <a href="javascript:;"
                                         class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown"> <span
                                             class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                height="24px" viewBox="0 0 24 24" version="1.1">
                                                 <g stroke="none" stroke-width="1" fill="none"
                                                     fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24"
@@ -111,16 +126,14 @@
                                             <li
                                                 class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                                 Choose an action: </li>
-                                            <li class="navi-item"> <a
-                                                    href="#"
-                                                    class="navi-link"> <span class="navi-icon"><i
-                                                            class="la la-print"></i></span> <span
+                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
+                                                        class="navi-icon"><i class="la la-print"></i></span> <span
                                                         class="navi-text">Block list</span> </a> </li>
                                             <li class="navi-item"> <a href="#" class="navi-link"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
                                                         class="navi-text">Copy</span> </a> </li>
                                             <li class="navi-item"> <a
-                                                    href="{{ route('branch.report.xlsx', Crypt::encrypt($branch->id)) }}"
+                                                    href="{{ route('supervision_committee.report.xlsx', Crypt::encrypt($supervision_committee->id)) }}"
                                                     class="navi-link"> <span class="navi-icon"><i
                                                             class="la la-file-excel-o"></i></span>
                                                     <span class="navi-text">Excel</span> </a> </li>
@@ -132,7 +145,8 @@
                                                     <span class="navi-text">PDF</span> </a> </li>
                                         </ul>
                                     </div>
-                                </div> <a href="{{ route('branches.edit', Crypt::encrypt($branch->id)) }}"
+                                </div> <a
+                                    href="{{ route('supervision_committees.edit', Crypt::encrypt($supervision_committee->id)) }}"
                                     class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details"> <span
                                         class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
@@ -150,7 +164,7 @@
                                                 </rect>
                                             </g>
                                         </svg> </span> </a> <button type="button"
-                                    onclick="confirmDestroy('{{ Crypt::encrypt($branch->id) }}', this)"
+                                    onclick="confirmDestroy('{{ Crypt::encrypt($supervision_committee->id) }}', this)"
                                     class="btn btn-sm btn-clean btn-icon" title="Delete"> <span
                                         class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
@@ -172,7 +186,7 @@
             </tbody>
         </table>
         <div class="datatable-pager datatable-paging-loaded">
-            {{ $branches->links() }}
+            {{ $supervision_committees->links() }}
         </div>
     </div>
     <!--end: Datatable-->

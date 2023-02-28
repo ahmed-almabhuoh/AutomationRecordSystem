@@ -11,6 +11,7 @@ use App\Http\Controllers\KeeperController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentParentController;
+use App\Http\Controllers\SupervisionCommitteeController;
 use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -40,6 +41,7 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::resource('student_parents', StudentParentController::class);
             Route::resource('students', StudentController::class);
             Route::resource('apis', APIKEYController::class);
+            Route::resource('supervision_committees', SupervisionCommitteeController::class);
 
             Route::resource('branches', BranchController::class);
         });
@@ -64,6 +66,8 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::get('/students/excel/report/{id}', [StudentController::class, 'getReportSpecificStudent'])->name('student.report.xlsx');
             Route::get('/apis/excel/report', [APIKEYController::class, 'getReport'])->name('apis.report.xlsx');
             Route::get('/apis/excel/report/{id}', [APIKEYController::class, 'getReportSpecificAPI'])->name('api.report.xlsx');
+            Route::get('/supervision_committees/excel/report', [SupervisionCommitteeController::class, 'getReport'])->name('supervision_committees.report.xlsx');
+            Route::get('/supervision_committees/excel/report/{id}', [SupervisionCommitteeController::class, 'getReportSpecificSupervisionCommittee'])->name('supervision_committee.report.xlsx');
 
             // Block Routes
             Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

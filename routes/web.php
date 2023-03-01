@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CenterController;
 use App\Http\Controllers\KeeperController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\StudentController;
@@ -40,10 +41,11 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::resource('keepers', KeeperController::class);
             Route::resource('student_parents', StudentParentController::class);
             Route::resource('students', StudentController::class);
-            Route::resource('apis', APIKEYController::class);
             Route::resource('supervision_committees', SupervisionCommitteeController::class);
 
             Route::resource('branches', BranchController::class);
+            Route::resource('centers', CenterController::class);
+            Route::resource('apis', APIKEYController::class);
         });
 
         Route::prefix('auto')->group(function () {
@@ -68,6 +70,8 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::get('/apis/excel/report/{id}', [APIKEYController::class, 'getReportSpecificAPI'])->name('api.report.xlsx');
             Route::get('/supervision_committees/excel/report', [SupervisionCommitteeController::class, 'getReport'])->name('supervision_committees.report.xlsx');
             Route::get('/supervision_committees/excel/report/{id}', [SupervisionCommitteeController::class, 'getReportSpecificSupervisionCommittee'])->name('supervision_committee.report.xlsx');
+            Route::get('/centers/excel/report', [CenterController::class, 'getReport'])->name('centers.report.xlsx');
+            Route::get('/centers/excel/report/{id}', [CenterController::class, 'getReportSpecificCenter'])->name('center.report.xlsx');
 
             // Block Routes
             Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

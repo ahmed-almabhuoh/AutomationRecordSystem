@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class Branch extends Model implements FromCollection, WithHeadings, WithStyles
+class Center extends Model implements FromCollection, WithHeadings, WithStyles
 {
+    use HasFactory;
+
     use HasFactory, SoftDeletes;
 
     // Attributes
     const STATUS = ['active', 'pending', 'inactive'];
-    const POSITION = 'branch';
+    const POSITION = 'center';
     protected $columns = [
         'id',
         'name',
@@ -25,20 +27,20 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
         'created_at',
         'updated_at',
     ];
-    protected $branch_id;
+    protected $center_id;
 
-    public function __construct($branch_id = 0)
+    public function __construct($center_id = 0)
     {
-        $this->branch_id = $branch_id;
+        $this->center_id = $center_id;
     }
 
     public function collection()
     {
-        if (!$this->branch_id) {
-            return Branch::select($this->columns)->get();
+        if (!$this->center_id) {
+            return Center::select($this->columns)->get();
         } else {
-            return Branch::select($this->columns)
-                ->where('id', '=', $this->branch_id)
+            return Center::select($this->columns)
+                ->where('id', '=', $this->center_id)
                 ->get();
         }
     }
@@ -54,7 +56,7 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
     }
 
     // Get Attributes
-    public function getBranchStatusClassAttribute()
+    public function getCenterStatusClassAttribute()
     {
         $class = 'label font-weight-bold label-lg  label-light-success label-inline';
         if ($this->status === 'inactive') {
@@ -65,19 +67,19 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
         return $class;
     }
 
-    public function getBranchDeletionAttribute()
+    public function getCenterDeletionAttribute()
     {
         return $this->deleted_at == null ? 'F' : 'T';
     }
 
-    public function getBranchDeletionClassAttribute()
+    public function getCenterDeletionClassAttribute()
     {
         return $this->deleted_at == null ? 'success' : 'danger';
     }
 
-    // Relation
-    public function centers()
+    // Relations
+    public function branch()
     {
-        return $this->hasMany(Center::class, 'branch_id', 'id');
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 }

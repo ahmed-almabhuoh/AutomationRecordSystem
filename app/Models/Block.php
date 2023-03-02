@@ -29,6 +29,22 @@ class Block extends Model
         return $class;
     }
 
+    // Scopes
+    public function scopeAdminActiveBlocks($query)
+    {
+        return $query->adminPosition()->where('status', '=', 'active');
+    }
+
+    public function scopeAdminDisabledBlocks($query)
+    {
+        return $query->adminPosition()->where('status', '=', 'disabled');
+    }
+
+    public function scopeAdminPosition($query)
+    {
+        return $query->where('position', '=', Admin::POSITION);
+    }
+
 
     // Relations
     public function manager()

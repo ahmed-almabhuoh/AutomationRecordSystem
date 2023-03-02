@@ -121,6 +121,6 @@ class Admin extends Authenticatable implements FromCollection, WithHeadings, Wit
     // Relations
     public function blocks()
     {
-        return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
+        return $this->hasMany(Block::class, 'blocked_id', 'id')->where('position', '=', Admin::POSITION)->orderBy('created_at', 'DESC');
     }
 }

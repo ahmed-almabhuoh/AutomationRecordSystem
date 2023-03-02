@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AdminController;
+use App\Http\Controllers\api\BlocksController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,19 @@ Route::prefix('auto')->group(function () {
         // Excel
         Route::get('/admin/excel/report', [AdminController::class, 'getReport']);
         Route::get('/admin/excel/report/{id}', [AdminController::class, 'getReportSpecificAdmin']);
+
+        // Blocks
+        Route::prefix('blocks')->group(function () {
+            Route::get('/', [BlocksController::class, 'index']);
+
+            // Admins
+            Route::get('admins', [BlocksController::class, 'admins']);
+            Route::post('admins/between', [BlocksController::class, 'blocksBetween']);
+            Route::get('admins-status/{status?}', [BlocksController::class, 'blockAdminStatus']);
+            Route::get('admins/{id}', [BlocksController::class, 'getAdminBlocks']);
+            Route::get('admins/{id}/{status?}', [BlocksController::class, 'getAdminWithStatusBlocks']);
+            Route::get('admins-search/{search?}', [BlocksController::class, 'searchForAdminBlocks']);
+        });
     });
 });
 

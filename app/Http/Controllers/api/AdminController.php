@@ -4,9 +4,11 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\AdminCreateRequest;
+use App\Http\Requests\api\AdminUpdateRequest;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,11 +80,15 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        $admin = Admin::findOrFail($id);
+        $admin = Admin::find($id);
+        if (is_null($admin))
+            return response()->json([
+                'message' => 'Admin not found!',
+            ], Response::HTTP_BAD_REQUEST);
         //
         return response()->json([
             'admin' => $admin,
-            'blocks' => $admin->blocks,
+            // 'blocks' => $admin->blocks,
         ], Response::HTTP_OK);
     }
 
@@ -95,7 +101,26 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $admin = Admin::findOrFail($id);
+        $admin = Admin::find($id);
+        if (is_null($admin))
+            return response()->json([
+                'message' => 'Admin not found!',
+            ], Response::HTTP_BAD_REQUEST);
+
+            $request->validate([  'fname' => 'required|string|min:2|max:20',
+            'sname' => 'required|string|min:2|max:20',
+            'tname' => 'required|string|min:2|max:20',
+            'lname' => 'required|string|min:2|max:20',
+            'phone' => 'required|string|min:7|max:13|unique:admins,phone,' . $admin->id,
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'gender' => 'required|string|in:male,female',
+            'status' => 'required|string|in:active,draft,blocked',
+            'identity_no' => 'required|string|min:9|max:9|unique:admins,identity_no,' . $admin->id,
+            'password' => ['nullable', Password::min(8)->uncompromised()->letters()->numbers(), 'max:25'],
+            'image' => 'nullable|image',
+            'local_region' => 'nullable|min:5|max:50',
+            'description' => 'nullable|min:10|max:150',]);
+
         $admin->fname = $request->input('fname');
         $admin->sname = $request->input('sname');
         $admin->tname = $request->input('tname');

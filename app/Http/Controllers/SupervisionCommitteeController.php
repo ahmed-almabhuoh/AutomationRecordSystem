@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SupervisionCommittee;
+use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
@@ -197,5 +198,46 @@ class SupervisionCommitteeController extends Controller
         // $manager = Manager::findOrFail(Crypt::decrypt($id));
         // $manager = Manager::find(Crypt::decrypt($id));
         return Excel::download(new SupervisionCommittee(Crypt::decrypt($id)), 'SupervisionCommittee.xlsx');
+    }
+
+    // Assign Supervisor To SC View
+    public function showAddSupverisors($id)
+    {
+        $sc = SupervisionCommittee::findOrFail(Crypt::decrypt($id));
+
+        return response()->view('backend.supervision_committees.add-supervisors', [
+            'sc' => $sc,
+            'supervisors' => Supervisor::whereDoesntHave('sc', function ($query) use ($id) {
+                $query->where('id', '!=', $id);
+            })->get(),
+        ]);
+    }
+
+    // Assign Supervisor To SC
+    public function addSupervisorToSC($sc_id, $s_id)
+    {
+        $sc = SupervisionCommittee::find(Crypt::decrypt($sc_id));
+        $s = Supervisor::find(Crypt::decrypt($s_id));
+
+        if (is_null($s) || is_null($sc)) {
+            return response()->json([
+                'message' => 'Wrong URL/URI!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($s->sc_id && $s->sc_id !== $sc->id) {
+            return response()->json([
+                'message' => $s->full_name . ' cannot added to this branch, un-lock him from current GSC!',
+            ], Response::HTTP_BAD_REQUEST);
+        } else {
+            $success_MSG = $s->sc_id === $sc->id ? $s->full_name . ' removed sucessfullt from' . $sc->name . ' committee.' : $s->full_name . ' added sucessfullt to' . $sc->name . ' committee.';
+
+            $s->sc_id = $s->sc_id === $sc->id ? null : $sc->id;
+            $isAdded = $s->save();
+
+            return response()->json([
+                'message' => $isAdded ? $success_MSG : 'Failed to add supervisor to this GCS, please try again!',
+            ], $isAdded ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }
     }
 }

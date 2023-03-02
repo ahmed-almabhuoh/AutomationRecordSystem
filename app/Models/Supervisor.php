@@ -110,4 +110,9 @@ class Supervisor extends Authenticatable implements FromCollection, WithHeadings
     {
         return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
     }
+
+    public function sc()
+    {
+        return $this->belongsTo(SupervisionCommittee::class, 'sc_id', 'id');
+    }
 }

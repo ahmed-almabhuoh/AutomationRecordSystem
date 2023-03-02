@@ -40,6 +40,7 @@ class SupervisionCommitteeSearchLivewire extends Component
                 $query->where('name', 'LIKE', '%' . $this->searchTerm . '%')
                     ->orWhere('region', 'LIKE', '%' . $this->searchTerm . '%');
             })
+                ->withCount('supervisors')
                 // ->orWhere('type', 'like', $this->type)
                 ->paginate(10);
         } else if ($this->type === 'only_trashed') {
@@ -48,6 +49,7 @@ class SupervisionCommitteeSearchLivewire extends Component
                     ->orWhere('region', 'LIKE', '%' . $this->searchTerm . '%');
             })
                 ->where('deleted_at', '!=', null)
+                ->withCount('supervisors')
                 // ->orWhere('type', 'like', $this->type)
                 ->paginate(10);
         } else {
@@ -56,6 +58,7 @@ class SupervisionCommitteeSearchLivewire extends Component
                     ->orWhere('region', 'LIKE', '%' . $this->searchTerm . '%');
             })
                 ->where('deleted_at', '=', null)
+                ->withCount('supervisors')
                 // ->orWhere('type', 'like', $this->type)
                 ->paginate(10);
         }

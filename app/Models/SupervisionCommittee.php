@@ -77,4 +77,10 @@ class SupervisionCommittee extends Model implements FromCollection, WithHeadings
     {
         return $this->deleted_at == null ? 'success' : 'danger';
     }
+
+    // Relations
+    public function supervisors()
+    {
+        return $this->hasMany(Supervisor::class, 'sc_id', 'id');
+    }
 }

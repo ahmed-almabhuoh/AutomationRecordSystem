@@ -98,7 +98,7 @@
                     <div class="checkbox-inline">
                         <label class="checkbox checkbox-outline checkbox-success">
                             <input wire:model="user_date_and_time" type="checkbox" name="is_blocked"
-                                checked="checked" id="is_blocked"/>
+                                checked="checked" id="is_blocked" />
                             <span></span>
                             Date & Time
                         </label>

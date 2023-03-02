@@ -1,6 +1,7 @@
 <div class="card-body">
     <!--begin: Search Form-->
     <!--begin::Search Form-->
+    {{-- {{dd($supervision_committees)}} --}}
     <div class="mb-7">
         <div class="row align-items-center">
             <div class="col-lg-9 col-xl-8">
@@ -54,6 +55,8 @@
                             style="width: 121px;">Type</span></th>
                     <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Image</span></th>
+                    <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                            style="width: 121px;">Supervisors</span></th>
                     <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Region</span></th>
                     <th data-field="Status" class="datatable-cell datatable-cell-sort"><span
@@ -88,6 +91,14 @@
                                     -
                                 @endif
                             </span></td>
+                        <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
+                                style="width: 121px;">
+                                <a href="{{ route('supervisors.to.sc', Crypt::encrypt($supervision_committee->id)) }}"
+                                    class="btn btn-outline-primary">SUP -
+                                    {{ $supervision_committee->supervisors_count }}</a>
+                            </span>
+                        </td>
+
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;">{{ $supervision_committee->region }}</span></td>
                         <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
@@ -126,9 +137,11 @@
                                             <li
                                                 class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                                 Choose an action: </li>
-                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
-                                                        class="navi-icon"><i class="la la-print"></i></span> <span
-                                                        class="navi-text">Block list</span> </a> </li>
+                                            <li class="navi-item"> <a
+                                                    href="{{ route('supervisors.to.sc', Crypt::encrypt($supervision_committee->id)) }}"
+                                                    class="navi-link"> <span class="navi-icon"><i
+                                                            class="la la-print"></i></span> <span
+                                                        class="navi-text">Supervisors</span> </a> </li>
                                             <li class="navi-item"> <a href="#" class="navi-link"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
                                                         class="navi-text">Copy</span> </a> </li>

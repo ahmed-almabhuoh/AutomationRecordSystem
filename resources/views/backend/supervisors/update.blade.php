@@ -26,6 +26,7 @@
         <!--begin::Form-->
         <form id="creation-form">
             <div class="card-body">
+
                 <div class="form-group">
                     <label>First name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" placeholder="Enter supervisor first name ..." id="fname"
@@ -52,8 +53,8 @@
 
                 <div class="form-group">
                     <label>Identity No. <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Enter supervisor identity No. ..." id="identity_no"
-                        value="{{ $supervisor->identity_no }}" />
+                    <input type="text" class="form-control" placeholder="Enter supervisor identity No. ..."
+                        id="identity_no" value="{{ $supervisor->identity_no }}" />
                     <span class="form-text text-muted">We'll never share your identity No. with anyone else.</span>
                 </div>
 
@@ -136,6 +137,14 @@
                     <label for="description">Supervisor description</label>
                     <textarea class="form-control" id="description" rows="5">{{ $supervisor->description }}</textarea>
                 </div>
+
+                @if (!is_null($supervisor->sc))
+                    <div class="form-group">
+                        <label>GCS <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="{{ $supervisor->sc->name }}"
+                            placeholder="Enter supervisor GCS ..." id="gcs" readonly />
+                    </div>
+                @endif
             </div>
             <div class="card-footer">
                 <button type="button" onclick="update('{{ Crypt::encrypt($supervisor->id) }}')"

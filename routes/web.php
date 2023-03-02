@@ -14,6 +14,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentParentController;
 use App\Http\Controllers\SupervisionCommitteeController;
 use App\Http\Controllers\SupervisorController;
+use App\Models\SupervisionCommittee;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -72,6 +73,10 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::get('/supervision_committees/excel/report/{id}', [SupervisionCommitteeController::class, 'getReportSpecificSupervisionCommittee'])->name('supervision_committee.report.xlsx');
             Route::get('/centers/excel/report', [CenterController::class, 'getReport'])->name('centers.report.xlsx');
             Route::get('/centers/excel/report/{id}', [CenterController::class, 'getReportSpecificCenter'])->name('center.report.xlsx');
+
+            // Assign Supervisor to SC
+            Route::get('/supervisor-to-sc/{id}', [SupervisionCommitteeController::class, 'showAddSupverisors'])->name('supervisors.to.sc');
+            Route::post('/supervisor-to-sc/{id}/supervisor/{s_id}', [SupervisionCommitteeController::class, 'addSupervisorToSC']);
 
             // Block Routes
             Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');

@@ -207,7 +207,8 @@ class SupervisionCommitteeController extends Controller
 
         return response()->view('backend.supervision_committees.add-supervisors', [
             'sc' => $sc,
-            'supervisors' => Supervisor::whereDoesntHave('sc', function ($query) use ($id) {
+            'supervisors' => Supervisor::whereDoesntHave('branch')
+            ->whereDoesntHave('sc', function ($query) use ($id) {
                 $query->where('id', '!=', $id);
             })->get(),
         ]);

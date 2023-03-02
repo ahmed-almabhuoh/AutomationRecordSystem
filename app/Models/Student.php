@@ -109,4 +109,9 @@ class Student extends Authenticatable implements FromCollection, WithHeadings, W
     {
         return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_student');
+    }
 }

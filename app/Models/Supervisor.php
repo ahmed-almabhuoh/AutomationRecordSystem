@@ -115,4 +115,9 @@ class Supervisor extends Authenticatable implements FromCollection, WithHeadings
     {
         return $this->belongsTo(SupervisionCommittee::class, 'sc_id', 'id');
     }
+
+    public function branch()
+    {
+        return $this->hasOne(Branch::class, 'supervisor_id', 'id');
+    }
 }

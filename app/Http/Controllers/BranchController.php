@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,7 +18,7 @@ class BranchController extends Controller
      */
     public function index()
     {
-        $branches = Branch::paginate();
+        $branches = Branch::with('supervisor')->paginate();
         //
         return response()->view('backend.branches.index', [
             'branches' => $branches,
@@ -194,5 +195,48 @@ class BranchController extends Controller
         // $manager = Manager::findOrFail(Crypt::decrypt($id));
         // $manager = Manager::find(Crypt::decrypt($id));
         return Excel::download(new Branch(Crypt::decrypt($id)), 'manager.xlsx');
+    }
+
+    // Assign CEO For Branch
+    public function showAddSupverisors($branch_id)
+    {
+        $branch = Branch::findOrFail(Crypt::decrypt($branch_id));
+
+        return response()->view('backend.branches.CEOs', [
+            'branch' => $branch,
+            'supervisors' => Supervisor::whereDoesntHave('sc')
+                ->whereDoesntHave('branch', function ($query) use ($branch) {
+                    $query->where('id', '!=', $branch->id);
+                })
+                ->get(),
+        ]);
+    }
+
+    // Add CEO To Branch
+    public function addSupervisorToBranch($branch_id, $s_id)
+    {
+        $branch = Branch::find(Crypt::decrypt($branch_id));
+        $supervisor = Supervisor::find(Crypt::decrypt($s_id));
+
+        if (is_null($branch) || is_null($supervisor)) {
+            return response()->json([
+                'message' => 'Wrong URL/URI!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($branch->supervisor_id && $branch->supervisor_id !== $supervisor->id) {
+            return response()->json([
+                'message' => 'This branch leads by ' . Supervisor::find($branch->id) ?? ' Not Defined ' . ' at this moment!'
+            ], Response::HTTP_BAD_REQUEST);
+        } else {
+            $success_MSG = $supervisor->id === $branch->supervisor_id ? $supervisor->full_name . ' removed sucessfullt from' . $branch->name . ' branch.' : $supervisor->full_name . ' added sucessfullt as a CEO to ' . $branch->name . ' branch.';
+
+            $branch->supervisor_id = $supervisor->id === $branch->supervisor_id ? null : $supervisor->id;
+            $isAdded = $branch->save();
+
+            return response()->json([
+                'message' => $isAdded ? $success_MSG : 'Failed to add supervisor to this branch, please try again!',
+            ], $isAdded ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        }
     }
 }

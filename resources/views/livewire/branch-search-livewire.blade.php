@@ -42,6 +42,8 @@
                             style="width: 121px;">Name</span></th>
                     <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Image</span></th>
+                    <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                            style="width: 121px;">CEO</span></th>
                     <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
                             style="width: 121px;">Region</span></th>
                     <th data-field="Status" class="datatable-cell datatable-cell-sort"><span
@@ -74,6 +76,10 @@
                                 @endif
                             </span></td>
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
+                                style="width: 121px;"><a
+                                    href="{{ route('supervisors.edit', Crypt::encrypt($branch->supervisor->id)) }}">{{ $branch->supervisor->fname }}</a></span>
+                        </td>
+                        <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;">{{ $branch->region }}</span></td>
                         <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
                                     class="{{ $branch->branch_status_class }}">{{ ucfirst($branch->status) }}</span></span>
@@ -94,8 +100,8 @@
                                 <div class="dropdown dropdown-inline"> <a href="javascript:;"
                                         class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown"> <span
                                             class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                height="24px" viewBox="0 0 24 24" version="1.1">
                                                 <g stroke="none" stroke-width="1" fill="none"
                                                     fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24"
@@ -112,10 +118,10 @@
                                                 class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                                 Choose an action: </li>
                                             <li class="navi-item"> <a
-                                                    href="#"
+                                                    href="{{ route('supervisors.to.branch', Crypt::encrypt($branch->id)) }}"
                                                     class="navi-link"> <span class="navi-icon"><i
                                                             class="la la-print"></i></span> <span
-                                                        class="navi-text">Block list</span> </a> </li>
+                                                        class="navi-text">CEOs</span> </a> </li>
                                             <li class="navi-item"> <a href="#" class="navi-link"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
                                                         class="navi-text">Copy</span> </a> </li>
@@ -124,12 +130,6 @@
                                                     class="navi-link"> <span class="navi-icon"><i
                                                             class="la la-file-excel-o"></i></span>
                                                     <span class="navi-text">Excel</span> </a> </li>
-                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
-                                                        class="navi-icon"><i class="la la-file-text-o"></i></span>
-                                                    <span class="navi-text">CSV</span> </a> </li>
-                                            <li class="navi-item"> <a href="#" class="navi-link"> <span
-                                                        class="navi-icon"><i class="la la-file-pdf-o"></i></span>
-                                                    <span class="navi-text">PDF</span> </a> </li>
                                         </ul>
                                     </div>
                                 </div> <a href="{{ route('branches.edit', Crypt::encrypt($branch->id)) }}"

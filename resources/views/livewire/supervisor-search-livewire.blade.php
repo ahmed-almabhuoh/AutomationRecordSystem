@@ -80,7 +80,8 @@
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;">
                                 @if ($supervisor->image)
-                                    <img src="{{ Storage::url($supervisor->image) }}" id="supervisor-image" alt="-">
+                                    <img src="{{ Storage::url($supervisor->image) }}" id="supervisor-image"
+                                        alt="-">
                                 @else
                                     -
                                 @endif

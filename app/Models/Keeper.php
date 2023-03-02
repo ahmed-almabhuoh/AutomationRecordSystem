@@ -107,4 +107,9 @@ class Keeper extends Authenticatable implements FromCollection, WithHeadings, Wi
     {
         return $this->hasMany(Block::class, 'blocked_id', 'id')->orderBy('created_at', 'DESC');
     }
+
+    public function group()
+    {
+        return $this->hasOne(Group::class, 'keeper_id', 'id');
+    }
 }

@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class Branch extends Model implements FromCollection, WithHeadings, WithStyles
+class Group extends Model implements FromCollection, WithHeadings, WithStyles
 {
     use HasFactory, SoftDeletes;
 
     // Attributes
     const STATUS = ['active', 'pending', 'inactive'];
-    const POSITION = 'branch';
+    const POSITION = 'group';
     protected $columns = [
         'id',
         'name',
@@ -25,20 +25,20 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
         'created_at',
         'updated_at',
     ];
-    protected $branch_id;
+    protected $group_id;
 
-    public function __construct($branch_id = 0)
+    public function __construct($group_id = 0)
     {
-        $this->branch_id = $branch_id;
+        $this->group_id = $group_id;
     }
 
     public function collection()
     {
-        if (!$this->branch_id) {
-            return Branch::select($this->columns)->get();
+        if (!$this->group_id) {
+            return Group::select($this->columns)->get();
         } else {
-            return Branch::select($this->columns)
-                ->where('id', '=', $this->branch_id)
+            return Group::select($this->columns)
+                ->where('id', '=', $this->group_id)
                 ->get();
         }
     }
@@ -54,7 +54,7 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
     }
 
     // Get Attributes
-    public function getBranchStatusClassAttribute()
+    public function getGroupStatusClassAttribute()
     {
         $class = 'label font-weight-bold label-lg  label-light-success label-inline';
         if ($this->status === 'inactive') {
@@ -65,26 +65,29 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
         return $class;
     }
 
-    public function getBranchDeletionAttribute()
+    public function getGroupDeletionAttribute()
     {
         return $this->deleted_at == null ? 'F' : 'T';
     }
 
-    public function getBranchDeletionClassAttribute()
+    public function getGroupDeletionClassAttribute()
     {
         return $this->deleted_at == null ? 'success' : 'danger';
     }
 
-    // Relation
-    public function centers()
+    // Relations
+    public function center()
     {
-        return $this->hasMany(Center::class, 'branch_id', 'id');
+        return $this->belongsTo(Center::class, 'center_id', 'id');
     }
 
-    public function supervisor()
+    public function keeper()
     {
-        return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id')->withDefault([
-            'full_name' => '-',
-        ]);
+        return $this->belongsTo(Keeper::class, 'keeper_id', 'id');
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'group_student');
     }
 }

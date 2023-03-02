@@ -12,8 +12,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class Center extends Model implements FromCollection, WithHeadings, WithStyles
 {
-    use HasFactory;
-
     use HasFactory, SoftDeletes;
 
     // Attributes
@@ -81,5 +79,10 @@ class Center extends Model implements FromCollection, WithHeadings, WithStyles
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class, 'center_id', 'id');
     }
 }

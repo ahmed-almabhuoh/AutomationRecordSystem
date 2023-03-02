@@ -5,36 +5,36 @@ namespace App\Http\Livewire;
 use App\Models\Supervisor;
 use Livewire\Component;
 
-class AddSupervisorToSupervisionCommitteeLivewire extends Component
+class AddCeoToBranchLivewire extends Component
 {
     protected $supervisors;
-    public $sc;
+    public $branch;
     public $searchTerm;
 
-    public function mount($sc)
+    public function mount($branch)
     {
-        $this->sc = $sc;
+        $this->branch = $branch;
         // $this->supervisors = $supervisors;
-        $this->supervisors = Supervisor::whereDoesntHave('branch')
-            ->whereDoesntHave('sc', function ($query) use ($sc) {
-                $query->where('id', '!=', $sc->id);
-            })->paginate();
+        $this->supervisors = Supervisor::whereDoesntHave('sc')
+            ->whereDoesntHave('branch', function ($query) use ($branch) {
+                $query->where('id', '!=', $branch->id);
+            })
+            ->paginate();
     }
-
     public function render()
     {
-        $sc = $this->sc;
+        $branch = $this->branch;
         $this->supervisors = Supervisor::where(function ($query) {
             $query->where('fname', 'LIKE', '%' . $this->searchTerm . '%')
                 ->orWhere('sname', 'LIKE', '%' . $this->searchTerm . '%')
                 ->orWhere('tname', 'LIKE', '%' . $this->searchTerm . '%')
                 ->orWhere('lname', 'LIKE', '%' . $this->searchTerm . '%');
-        })->whereDoesntHave('branch')
-            ->whereDoesntHave('sc', function ($query) use ($sc) {
-                $query->where('id', '!=', $sc->id);
-            })->paginate();
+        })->whereDoesntHave('branch', function ($query) use ($branch) {
+            $query->where('id', '!=', $branch->id);
+        })->whereDoesntHave('sc')
+            ->paginate();
 
-        return view('livewire.add-supervisor-to-supervision-committee-livewire', [
+        return view('livewire.add-ceo-to-branch-livewire', [
             'supervisors' => $this->supervisors,
         ]);
     }

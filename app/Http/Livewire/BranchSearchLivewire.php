@@ -36,19 +36,19 @@ class BranchSearchLivewire extends Component
 
 
         if ($this->type === 'all') {
-            $this->branches = Branch::where(function ($query) {
+            $this->branches = Branch::with('supervisor')->where(function ($query) {
                 $query->where('name', 'LIKE', '%' . $this->searchTerm . '%')
                     ->orWhere('region', 'LIKE', '%' . $this->searchTerm . '%');
             })->paginate(10);
         } else if ($this->type === 'only_trashed') {
-            $this->branches = Branch::where(function ($query) {
+            $this->branches = Branch::with('supervisor')->where(function ($query) {
                 $query->where('name', 'LIKE', '%' . $this->searchTerm . '%')
                     ->orWhere('region', 'LIKE', '%' . $this->searchTerm . '%');
             })
                 ->where('deleted_at', '!=', null)
                 ->paginate(10);
         } else {
-            $this->branches = Branch::where(function ($query) {
+            $this->branches = Branch::with('supervisor')->where(function ($query) {
                 $query->where('name', 'LIKE', '%' . $this->searchTerm . '%')
                     ->orWhere('region', 'LIKE', '%' . $this->searchTerm . '%');
             })

@@ -78,6 +78,10 @@ Route::prefix('/')->middleware(['auth:manager,admin,supervisor,keeper', 'activat
             Route::get('/supervisor-to-sc/{id}', [SupervisionCommitteeController::class, 'showAddSupverisors'])->name('supervisors.to.sc');
             Route::post('/supervisor-to-sc/{id}/supervisor/{s_id}', [SupervisionCommitteeController::class, 'addSupervisorToSC']);
 
+            // Assign Supervisor to Branch
+            Route::get('/supervisor-to-branch/{id}', [BranchController::class, 'showAddSupverisors'])->name('supervisors.to.branch');
+            Route::post('/supervisor-to-branch/{branch_id}/supervisor/{s_id}', [BranchController::class, 'addSupervisorToBranch']);
+
             // Block Routes
             Route::get('/blockes/{blocked_id}/{guard?}', [BlockController::class, 'show'])->name('user.blocks');
             Route::post('block/{blocked_id}/{guard}', [BlockController::class, 'store'])->name('blocks.store');

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable implements FromCollection, WithHeadings, WithStyles
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasApiTokens;
 
     // Attributes
     protected $columns = [

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Sanctum\HasApiTokens;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -13,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 
 class Student extends Authenticatable implements FromCollection, WithHeadings, WithStyles
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasApiTokens;
 
     // Attributes
     protected $columns = [

@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+//Authentication Routes
+Route::prefix('auto')->group(function () {
+    Route::post('/login', [\App\Http\Controllers\api\AuthenticationController::class, 'login']);
+});
+
 Route::prefix('auto')->group(function () {
     Route::prefix('/')->group(function () {
         Route::resource('admins', AdminController::class);

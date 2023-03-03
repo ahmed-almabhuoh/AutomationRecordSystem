@@ -46,6 +46,11 @@ return [
             'provider' => 'managers',
         ],
 
+//        'api' => [
+//            'driver' => 'sanctum',
+//            'provider' => 'admins',
+//        ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
@@ -59,6 +64,34 @@ return [
         'keeper' => [
             'driver' => 'session',
             'provider' => 'keepers',
+        ],
+
+
+
+
+        'admin_api' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'supervisor_api' => [
+            'driver' => 'session',
+            'provider' => 'supervisors',
+        ],
+
+        'keeper_api' => [
+            'driver' => 'session',
+            'provider' => 'keepers',
+        ],
+
+        'parent_api' => [
+            'driver' => 'session',
+            'provider' => 'parents',
+        ],
+
+        'student_api' => [
+            'driver' => 'session',
+            'provider' => 'students',
         ],
     ],
 
@@ -104,6 +137,17 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Keeper::class,
         ],
+
+        'parents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\StudentParent::class,
+        ],
+
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Student::class,
+        ],
+
 
         // 'users' => [
         //     'driver' => 'database',
